@@ -14,41 +14,39 @@ using System.Linq;
 namespace StockTrackingAutomation.Web.Controllers
 {
     [AuthFilter]
-    public class StockLogController : Controller
+    public class DebtLogController : Controller
     {
-        private static EasLog logger = EasLogFactory.CreateLogger(nameof(StockLogController));
+        private static EasLog logger = EasLogFactory.CreateLogger(nameof(DebtLogController));
 
         [HttpGet]
         public IActionResult List()
         {
-            var list = StockLogMgr.This.GetValidList();
-            logger.Info("StockLog list: " + list.Count);
+            var list = DebtLogMgr.This.GetValidList();
+            logger.Info("DebtLog list: " + list.Count);
             return View(list);
         }
         [HttpGet]
         public IActionResult Create()
         {
-            var res = new StockLogCreateViewModel
+            var res = new DebtLogCreateViewModel
             {
-                Products = ProductMgr.This.GetValidProducts(),
                 Customers = CustomerMgr.This.GetValidCustomers()
             };
             return View(res);
         }
         [HttpPost]
-        public IActionResult Create(StockLogCreateViewModel viewModel)
+        public IActionResult Create(DebtLogCreateViewModel viewModel)
         {
-            viewModel.Products = ProductMgr.This.GetValidProducts();
             viewModel.Customers = CustomerMgr.This.GetValidCustomers();
             var userNo = HttpContext.GetUser().UserNo;
-            var res = StockLogMgr.This.AddStockLog(viewModel.Data, userNo);
+            var res = DebtLogMgr.This.AddNewRecord(viewModel.Data, userNo);
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.Message);
-                logger.Warn("Stock log create:" + viewModel.Data.ToJsonString(), res.ToJsonString());
+                logger.Warn("DebtLog create:" + viewModel.Data.ToJsonString(), res.ToJsonString());
                 return View(viewModel);
             }
-            logger.Info("Stock log create:" + viewModel.Data.ToJsonString());
+            logger.Info("DebtLog create:" + viewModel.Data.ToJsonString());
             return RedirectToAction("List");
         }
     }

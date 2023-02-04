@@ -1,7 +1,8 @@
-﻿using Domain.Entities;
+﻿using Application.Caching;
+using Application.Manager;
+using Domain.Entities;
 using EasMe;
 using EasMe.Extensions;
-using Infrastructure.Caching;
 using Infrastructure.DAL;
 using Microsoft.AspNetCore.Mvc;
 using StockTrackingAutomation.Web.Filters;
@@ -31,23 +32,14 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpPost]
         public IActionResult Edit(Product product)
         {
-            var current = ProductDAL.This.Find(product.ProductNo);
-            if (current is null)
+            var res = ProductMgr.This.UpdateProduct(product);
+            if (!res.IsSuccess)
             {
-                logger.Info("Product edit: " + product.ToJsonString(),"Ürün bulunamadı");
-                ModelState.AddModelError("", "Ürün bulunamadı");
+                ModelState.AddModelError("", res.Message);
+                logger.Warn("Product edit:" + product.ToJsonString(), res.ToJsonString());
                 return View(product);
             }
-            current.Description = product.Description;
-            current.Name = product.Name;
-            var res = ProductDAL.This.Update(current);
-            if (!res)
-            {
-                logger.Warn("Product edit: " + product.ToJsonString(), res.ToJsonString());
-                ModelState.AddModelError("", "DbError");
-                return View(product);
-            }
-
+            logger.Info("Product edit:" + product.ToJsonString());
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -58,11 +50,11 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpPost]
         public IActionResult Create(Product product)
         {
-            var res = ProductDAL.This.Add(product);
-            if (!res)
+            var res = ProductMgr.This.AddProduct(product);
+            if (!res.IsSuccess)
             {
-                ModelState.AddModelError("", "DbError");
-                logger.Warn("Product edit: " + product.ToJsonString(), res.ToJsonString());
+                ModelState.AddModelError("", res.Message);
+                logger.Warn("Product add: " + product.ToJsonString(), res.ToJsonString());
                 return View(product);
             }
             logger.Info("Product add: " + product.ToJsonString(), res.ToJsonString());
@@ -71,18 +63,11 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var data = ProductDAL.This.Find(id);
-            if (data == null)
-            {
-                return RedirectToAction("List");
-            }
-            data.DeletedDate = DateTime.Now;
-            var res = ProductDAL.This.Update(data);
-            if (!res)
+            var res = ProductMgr.This.DeleteProduct(id);
+            if (!res.IsSuccess)
             {
                 logger.Warn("Product delete: " + id, res.ToJsonString());
-                ModelState.AddModelError("", "DbError");
-                return View(data);
+                return RedirectToAction("List");
             }
             logger.Info("Product delete: " + id, res.ToJsonString());
             return RedirectToAction("List");

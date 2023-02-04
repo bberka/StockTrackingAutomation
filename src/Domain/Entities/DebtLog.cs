@@ -5,14 +5,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using EasMe.EFCore;
 
 namespace Domain.Entities
 {
-	public class StockLog : IEfEntity
-	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public class DebtLog : IEfEntity
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Kayıt No")]
         public int Id { get; set; }
 
@@ -23,39 +24,31 @@ namespace Domain.Entities
         public byte Type { get; set; }
 
         [Display(Name = "Kayıt Tipi")]
-        public string TypeString 
-        { 
+        public string TypeString
+        {
             get
             {
                 return Type switch
                 {
                     1 => "Alınan",
                     2 => "Verilen",
-                    _ => "TanımlıDeğil",
+                    _ => "Tanımlı Değil",
                 };
-            } 
+            }
         }
-
-        [Display(Name = "Ürün")]
-        [ForeignKey("Product")]
-		public int ProductId { get; set; }
-
-        [Display(Name = "Ürün Sayısı")]
-        public long Count { get; set; }
-
-        [Display(Name = "Müşteri")]
         [ForeignKey("Customer")]
+        [Display(Name = "Müşteri No")]
         public int CustomerId { get; set; }
 
-        [Display(Name = "Birim Fiyat")]
-        public double PricePerUnit  { get; set; }
+        [Display(Name = "Para Miktarı")]
+        public double Money { get; set; }
 
         [MaxLength(1000)]
         [Display(Name = "Açıklama")]
         public string? Description { get; set; }
 
-		[ForeignKey("User")]
+        [ForeignKey("User")]
         [Display(Name = "Kaydı Giren Kullanıcı")]
         public int UserId { get; set; }
-	}
+    }
 }

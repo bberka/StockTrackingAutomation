@@ -1,12 +1,12 @@
 ﻿@using Application.Caching;
-@model IEnumerable<Domain.Entities.StockLog>
+@model IEnumerable<Domain.Entities.DebtLog>
 
 @{
     ViewData["Title"] = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Stok Takip Listesi</h1>
+<h1>Borç Takip Listesi</h1>
 
 <p>
     <a asp-action="Create">Yeni Kayıt Ekle</a>
@@ -20,23 +20,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.RegisterDate)
             </th>
+    
             <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductId)
+                @Html.DisplayNameFor(model => model.TypeString)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CustomerId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PricePerUnit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Count)
-            </th>
-            <th>
-                Toplam Fiyat
+                @Html.DisplayNameFor(model => model.Money)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
@@ -73,36 +65,25 @@
                 </td>
                 <td>
                     @{
-                        var productName = DbCache.GetProductName(item.ProductId);
-                    }
-                    @Html.ActionLink(productName,"Edit","Product", new { id = item.ProductId })
-                </td>
-
-                <td>
-                    @{
                         var customerFirmName = DbCache.GetCustomerName(item.CustomerId);
                     }
                     @Html.ActionLink(customerFirmName,"Details","Customer", new { id = item.CustomerId })
                 </td>
+                
                 <td>
-                    @Html.DisplayFor(modelItem => item.PricePerUnit)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Count)
-                </td>
-                <td>
-                    @(item.Count * item.PricePerUnit)
+                    @Html.DisplayFor(modelItem => item.Money)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
-                <td>
+                
+                  <td>
                     @{
                         var userName = DbCache.GetUserEmail(item.UserId);
                     }
                     @Html.DisplayFor(modelItem => userName)
                 </td>
-               
+              
             </tr>
         }
     </tbody>

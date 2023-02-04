@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="EasMe">
       <HintPath>E:\Repos\easme-lib\EasMe\bin\Release\net6.0\EasMe.dll</HintPath>
     </Reference>

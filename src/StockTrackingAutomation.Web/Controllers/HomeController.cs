@@ -1,8 +1,10 @@
-﻿using Domain.Helpers;
+﻿using Application.Manager;
+using Domain.Helpers;
 using Domain.Models;
 using EasMe;
 using EasMe.Extensions;
 using Infrastructure.DAL;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol;
 using StockTrackingAutomation.Web.Filters;
@@ -34,7 +36,7 @@ namespace StockTrackingAutomation.Web.Controllers
 			{
 				return RedirectToAction("Statistics");
             }
-            var res = UserDAL.This.Login(model);
+            var res = UserMgr.This.Login(model);
 			if (!res.IsSuccess)
 			{
 				ModelState.AddModelError("", res.Message);

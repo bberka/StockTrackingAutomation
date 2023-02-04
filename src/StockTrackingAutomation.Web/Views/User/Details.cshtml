@@ -1,81 +1,90 @@
-﻿@using Domain.Enums;
-@model Domain.Entities.User
+﻿@model Domain.Entities.User
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Kullanıcı Detay</h1>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="dialog">
-            <div class="form-group">
-                <label asp-for="UserNo" class="control-label"></label>
-                <input asp-for="UserNo" readonly class="form-control" />
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" readonly asp-for="IsValid" /> @Html.DisplayNameFor(model => model.IsValid)
-                </label>
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="RegisterDate" class="control-label"></label>
-                <input asp-for="RegisterDate" readonly class="form-control" />
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" readonly class="form-control" />
-            </div>
-           
-            <br />
-            <div class="form-group">
-                <label asp-for="LastLoginIp" class="control-label"></label>
-                <input asp-for="LastLoginIp" readonly class="form-control" />
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="LastLoginUserAgent" class="control-label"></label>
-                <input asp-for="LastLoginUserAgent" readonly class="form-control" />
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="LastLoginDate" class="control-label"></label>
-                <input asp-for="LastLoginDate" readonly class="form-control" />
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="FailedPasswordCount" class="control-label"></label>
-                <input asp-for="FailedPasswordCount" readonly class="form-control" />
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="PasswordLastUpdateDate" class="control-label"></label>
-                <input asp-for="PasswordLastUpdateDate" readonly class="form-control" />
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="DeletedDate" class="control-label"></label>
-                <input asp-for="DeletedDate" readonly class="form-control" />
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="RoleType" class="control-label"></label>
-                <input value="@((RoleType)Model.RoleType)" readonly class="form-control" />
-            </div>
-        </form>
-    </div>
-</div>
-  <br />
-<br />
 <div>
-    <a asp-action="List">Listeye Dön</a>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UserNo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UserNo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsValid)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsValid)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RegisterDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RegisterDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmailAddress)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LastLoginIp)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LastLoginIp)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LastLoginUserAgent)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LastLoginUserAgent)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LastLoginDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LastLoginDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FailedPasswordCount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FailedPasswordCount)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PasswordLastUpdateDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PasswordLastUpdateDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DeletedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DeletedDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RoleType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RoleType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RoleString)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RoleString)
+        </dd>
+    </dl>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<div>
+    @Html.ActionLink("Düzenle", "Edit", new { id = Model.UserNo}) |
+    <a asp-action="Index">Listeye Dön</a>
+</div>

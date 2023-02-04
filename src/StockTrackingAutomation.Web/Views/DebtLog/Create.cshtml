@@ -1,12 +1,12 @@
 ﻿@using Domain.Models;
-@model StockLogCreateViewModel
+@model DebtLogCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Stok Kaydı Ekle</h1>
+<h1>Borç Kayıt Listesi</h1>
 
 <hr />
 <div class="row">
@@ -14,22 +14,17 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
              <label asp-for="Data.Type" class="control-label"></label>
-            <select asp-for="Data.Type" class="form-select" aria-label="Seçiniz">
+            <select select asp-for="Data.Type" class="form-select" aria-label="Seçiniz">
               <option selected disabled value="0">Seçiniz</option>
               <option value="1">Alınan</option>
               <option value="2">Verilen</option>
             </select>
             <br />
-            <label asp-for="Data.ProductId" class="control-label"></label>
-            <select asp-for="Data.ProductId" class="form-select" aria-label="Seçiniz">
-              <option selected disabled value="0">Seçiniz</option>
-                @foreach(var p in Model.Products)
-                {
-                    <option value="@p.ProductNo">@p.Name</option>
-                }
-            </select>
-
-         
+            <div class="form-group">
+                <label asp-for="Data.Money" class="control-label"></label>
+                <input asp-for="Data.Money" class="form-control" />
+                <span asp-validation-for="Data.Money" class="text-danger"></span>
+            </div>
             <br />
             <label asp-for="Data.CustomerId" class="control-label"></label>
             <select asp-for="Data.CustomerId" class="form-select" aria-label="Seçiniz">
@@ -41,24 +36,12 @@
             </select>
             <br />
             <div class="form-group">
-                <label asp-for="Data.Count" class="control-label"></label>
-                <input asp-for="Data.Count" class="form-control" />
-                <span asp-validation-for="Data.Count" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="Data.PricePerUnit" class="control-label"></label>
-                <input asp-for="Data.PricePerUnit" class="form-control" />
-                <span asp-validation-for="Data.PricePerUnit" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
                 <label asp-for="Data.Description" class="control-label"></label>
                 <input asp-for="Data.Description" class="form-control" />
                 <span asp-validation-for="Data.Description" class="text-danger"></span>
-            </div>
-        
+            </div>            
             <br />
+
             <div class="form-group">
                 <input type="submit" value="Ekle" class="btn btn-primary w-100" />
             </div>
@@ -66,6 +49,7 @@
     </div>
 </div>
 <br />
+
 <div>
     <a asp-action="List">Listeye Dön</a>
 </div>

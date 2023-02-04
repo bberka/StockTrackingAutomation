@@ -55,6 +55,7 @@ namespace Domain.Entities
         [Display(Name = "Rol")]
         public int RoleType { get; set; }
 
+        [Display(Name = "Rol")]
         public string RoleString { get { 
             switch(RoleType)
                 {

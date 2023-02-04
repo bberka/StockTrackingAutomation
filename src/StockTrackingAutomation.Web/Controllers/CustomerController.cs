@@ -12,44 +12,44 @@ using StockTrackingAutomation.Web.Filters;
 namespace StockTrackingAutomation.Web.Controllers
 {
     [AuthFilter(RoleType.Owner)]
-    public class UserController : Controller
+    public class CustomerController : Controller
     {
-        private static EasLog logger = EasLogFactory.CreateLogger(nameof(UserController));
+        private static EasLog logger = EasLogFactory.CreateLogger(nameof(CustomerController));
 
         [HttpGet]
         public IActionResult List()
         {
-            DbCache.UserCache.Refresh();
-            var list = DbCache.UserCache.Get();
-            logger.Info("User list count:" + list.Count);
+            DbCache.CustomerCache.Refresh();
+            var list = DbCache.CustomerCache.Get();
+            logger.Info("Customer list count:" + list.Count);
             return View(list);
         }
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var user = UserMgr.This.GetUser(id);
-            logger.Info("User details:" + id);
+            var user = CustomerMgr.This.GetValidCustomer(id);
+            logger.Info("Customer details:" + id);
             return View(user);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var user = UserMgr.This.GetUser(id);
-            logger.Info("User edit:" + id);
+            var user = CustomerMgr.This.GetValidCustomer(id);
+            logger.Info("Customer edit:" + id);
             return View(user);
         }
         [HttpPost]
-        public IActionResult Edit(User user)
+        public IActionResult Edit(Customer customer)
         {
            
-            var res = UserMgr.This.UpdateUser(user);
+            var res = CustomerMgr.This.UpdateCustomer(customer);
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.Message);
-                logger.Warn("User edit:" + user.ToJsonString(),res.ToJsonString());
-                return View(user);
+                logger.Warn("Customer edit:" + customer.ToJsonString(),res.ToJsonString());
+                return View(customer);
             }
-            logger.Info("User edit:" + user.ToJsonString());
+            logger.Info("Customer edit:" + customer.ToJsonString());
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -58,29 +58,29 @@ namespace StockTrackingAutomation.Web.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(User user)
+        public IActionResult Create(Customer customer)
         {
-            var res = UserMgr.This.Register(user);
+            var res = CustomerMgr.This.AddCustomer(customer);
             if (!res.IsSuccess)
             {
-                logger.Warn("User add:" + user.ToJsonString(), res.ToJsonString());
+                logger.Warn("customer add:" + customer.ToJsonString(), res.ToJsonString());
                 ModelState.AddModelError("", res.Message);
-                return View(user);
+                return View(customer);
             }
-            logger.Info("User add:" + user.ToJsonString());
+            logger.Info("customer add:" + customer.ToJsonString());
             return RedirectToAction("List");
         }
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var res = UserMgr.This.DeleteUser(id);
+            var res = CustomerMgr.This.DeleteCustomer(id);
             if (!res.IsSuccess)
             {
-                logger.Warn("User delete:" + id, res.ToJsonString());
+                logger.Warn("Customer delete:" + id, res.ToJsonString());
                 ModelState.AddModelError("", res.Message);
                 return RedirectToAction("List");
             }
-            logger.Info("User delete:" + id);
+            logger.Info("Customer delete:" + id);
             return RedirectToAction("List");
         }
     }

@@ -24,7 +24,7 @@ namespace Domain.Entities
 		[MaxLength(512)]
 
         [Display(Name = "Açıklama")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Display(Name = "Stok")]
         public long Stock { get; set; }

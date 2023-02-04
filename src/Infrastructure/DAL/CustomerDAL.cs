@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DAL
 {
-	public class ProductDAL : EfEntityRepositoryBase<Product, BusinessDbContext>, IEfEntityRepository<Product>
+	public class CustomerDAL : EfEntityRepositoryBase<Customer, BusinessDbContext>, IEfEntityRepository<Customer>
 	{
-		private ProductDAL() { }
-		public static ProductDAL This
+		private CustomerDAL() { }
+		public static CustomerDAL This
 		{
 			get
 			{
@@ -22,9 +22,9 @@ namespace Infrastructure.DAL
 				return Instance;
 			}
 		}
-		private static ProductDAL? Instance;
+		private static CustomerDAL? Instance;
+		
 
-      
     }
 
 }
