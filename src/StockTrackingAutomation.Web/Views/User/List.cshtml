@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Domain.Entities.User>
+
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>User List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsValid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegisterDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAddress)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.LastLoginIp)
+            </th>
+     
+            <th>
+                @Html.DisplayNameFor(model => model.LastLoginDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FailedPasswordCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PasswordLastUpdateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeletedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoleType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsValid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegisterDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastLoginIp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastLoginDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FailedPasswordCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PasswordLastUpdateDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeletedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleType)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.UserNo }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.UserNo }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.UserNo })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
