@@ -1,5 +1,6 @@
 ﻿using Application.Manager;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Helpers;
 using Domain.Models;
 using EasMe;
@@ -13,7 +14,7 @@ using System.Linq;
 
 namespace StockTrackingAutomation.Web.Controllers
 {
-    [AuthFilter]
+    [AuthFilter(RoleType.Owner)]
     public class DebtLogController : Controller
     {
         private static EasLog logger = EasLogFactory.CreateLogger(nameof(DebtLogController));
@@ -22,7 +23,7 @@ namespace StockTrackingAutomation.Web.Controllers
         public IActionResult List()
         {
             var list = DebtLogMgr.This.GetValidList();
-            logger.Info("DebtLog list: " + list.Count);
+            logger.Info("DebtLogList: " + list.Count);
             return View(list);
         }
         [HttpGet]
@@ -43,10 +44,10 @@ namespace StockTrackingAutomation.Web.Controllers
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.Message);
-                logger.Warn("DebtLog create:" + viewModel.Data.ToJsonString(), res.ToJsonString());
+                logger.Warn("DebtLogCreate:" + viewModel.Data.ToJsonString(), res.ToJsonString());
                 return View(viewModel);
             }
-            logger.Info("DebtLog create:" + viewModel.Data.ToJsonString());
+            logger.Info("DebtLogCreate:" + viewModel.Data.ToJsonString());
             return RedirectToAction("List");
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.ValueObjects;
+using Infrastructure.Concrete;
 using Infrastructure.DAL;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,8 @@ namespace Application.Manager
 
         public Result AddNewRecord(DebtLog log, int id)
         {
-            var customer = CustomerMgr.This.GetValidCustomer(log.CustomerId);
+
+            var customer = CustomerMgr.This.GetValidCustomer(log.CustomerId.Value);
             if (customer == null)
             {
                 return Result.Error(1, "Müşteri bulunamadı");
@@ -52,7 +54,27 @@ namespace Application.Manager
         }
         public List<DebtLog> GetValidList()
         {
-            return DebtLogDAL.This.GetList();
+            var list = DebtLogDAL.This.GetList();
+            var customers = CustomerMgr.This.GetValidCustomers().Select(x => x.CustomerNo).ToList();
+            var suppliers = SupplierMgr.This.GetValidSuppliers().Select(x => x.SupplierNo).ToList();
+            foreach(var item in list)
+            {
+                if(item.CustomerId != null)
+                {
+                    if (!customers.Contains(item.CustomerId.Value))
+                    {
+                        list.Remove(item);
+                    }
+                }
+                if(item.SupplierId != null)
+                {
+                    if (!suppliers.Contains(item.SupplierId.Value))
+                    {
+                        list.Remove(item);
+                    }
+                }
+            }
+            return list;
         }
     }
 }

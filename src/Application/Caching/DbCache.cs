@@ -15,7 +15,13 @@ namespace Application.Caching
         public readonly static EasCache<List<User>> UserCache = new(UserMgr.This.GetValidUsers,1);
         public readonly static EasCache<List<Product>> ProductCache = new(ProductMgr.This.GetValidProducts,1);
         public readonly static EasCache<List<Customer>> CustomerCache = new(CustomerMgr.This.GetValidCustomers,1);
-
+        public readonly static EasCache<List<Supplier>> SupplierCache = new(SupplierMgr.This.GetValidSuppliers,1);
+        public static string GetSupplierName(int id)
+        {
+            var data = SupplierCache.Get().FirstOrDefault(x => x.SupplierNo == id);
+            if (data is null) return "NaN";
+            return data.Name;
+        }
      
         public static string GetCustomerName(int id)
         {

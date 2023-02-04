@@ -9,7 +9,7 @@ using EasMe.EFCore;
 
 namespace Domain.Entities
 {
-	public class StockLog : IEfEntity
+	public class SaleLog : IEfEntity
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,23 +18,6 @@ namespace Domain.Entities
 
         [Display(Name = "Kayıt Tarihi")]
         public DateTime RegisterDate { get; set; } = DateTime.Now;
-
-        [Display(Name = "Kayıt Tipi")]
-        public byte Type { get; set; }
-
-        [Display(Name = "Kayıt Tipi")]
-        public string TypeString 
-        { 
-            get
-            {
-                return Type switch
-                {
-                    1 => "Alınan",
-                    2 => "Verilen",
-                    _ => "TanımlıDeğil",
-                };
-            } 
-        }
 
         [Display(Name = "Ürün")]
         [ForeignKey("Product")]

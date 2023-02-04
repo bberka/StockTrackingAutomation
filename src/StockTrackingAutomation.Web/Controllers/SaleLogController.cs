@@ -1,5 +1,6 @@
 ﻿using Application.Manager;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Helpers;
 using Domain.Models;
 using EasMe;
@@ -13,22 +14,22 @@ using System.Linq;
 
 namespace StockTrackingAutomation.Web.Controllers
 {
-    [AuthFilter]
-    public class StockLogController : Controller
+    [AuthFilter(RoleType.Owner)]
+    public class SaleLogController : Controller
     {
-        private static EasLog logger = EasLogFactory.CreateLogger(nameof(StockLogController));
+        private static EasLog logger = EasLogFactory.CreateLogger(nameof(SaleLogController));
 
         [HttpGet]
         public IActionResult List()
         {
-            var list = StockLogMgr.This.GetValidList();
-            logger.Info("StockLog list: " + list.Count);
+            var list = SaleLogMgr.This.GetValidList();
+            logger.Info("SaleLogList: " + list.Count);
             return View(list);
         }
         [HttpGet]
         public IActionResult Create()
         {
-            var res = new StockLogCreateViewModel
+            var res = new SaleLogCreateViewModel
             {
                 Products = ProductMgr.This.GetValidProducts(),
                 Customers = CustomerMgr.This.GetValidCustomers()
@@ -36,19 +37,20 @@ namespace StockTrackingAutomation.Web.Controllers
             return View(res);
         }
         [HttpPost]
-        public IActionResult Create(StockLogCreateViewModel viewModel)
+        public IActionResult Create(SaleLogCreateViewModel viewModel)
         {
             viewModel.Products = ProductMgr.This.GetValidProducts();
             viewModel.Customers = CustomerMgr.This.GetValidCustomers();
             var userNo = HttpContext.GetUser().UserNo;
-            var res = StockLogMgr.This.AddStockLog(viewModel.Data, userNo);
+            viewModel.Data.UserId = userNo;
+            var res = SaleLogMgr.This.AddSaleLog(viewModel.Data);
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.Message);
-                logger.Warn("Stock log create:" + viewModel.Data.ToJsonString(), res.ToJsonString());
+                logger.Warn("SaleLogCreate:" + viewModel.Data.ToJsonString(), res.ToJsonString());
                 return View(viewModel);
             }
-            logger.Info("Stock log create:" + viewModel.Data.ToJsonString());
+            logger.Info("SaleLogCreate:" + viewModel.Data.ToJsonString());
             return RedirectToAction("List");
         }
     }

@@ -1,0 +1,69 @@
+﻿@using Domain.Models;
+@model BuyLogCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Alış Kaydı Ekle</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <label asp-for="Data.ProductId" class="control-label"></label>
+            <select asp-for="Data.ProductId" class="form-select" aria-label="Seçiniz">
+                <option selected disabled value="0">Seçiniz</option>
+                @foreach (var p in Model.Products)
+                {
+                    <option value="@p.ProductNo">@p.Name</option>
+                }
+            </select>
+            <br />
+            <div class="form-group">
+                <label asp-for="Data.Count" class="control-label"></label>
+                <input asp-for="Data.Count" class="form-control" />
+                <span asp-validation-for="Data.Count" class="text-danger"></span>
+            </div>
+            <br />
+            <label asp-for="Data.SupplierId" class="control-label"></label>
+            <select asp-for="Data.SupplierId" class="form-select" aria-label="Seçiniz">
+                <option selected disabled value="0">Seçiniz</option>
+                @foreach (var p in Model.Suppliers)
+                {
+                    <option value="@p.SupplierNo">@p.Name</option>
+                }
+            </select>
+            <br />
+            <div class="form-group">
+                <label asp-for="Data.PricePerUnit" class="control-label"></label>
+                <input asp-for="Data.PricePerUnit" class="form-control" />
+                <span asp-validation-for="Data.PricePerUnit" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Data.Description" class="control-label"></label>
+                <input asp-for="Data.Description" class="form-control" />
+                <span asp-validation-for="Data.Description" class="text-danger"></span>
+            </div>
+
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Ekle" class="btn btn-primary w-100" />
+            </div>
+        </form>
+    </div>
+</div>
+ <br />
+<div>
+    <a asp-action="List">Listeye Dön</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

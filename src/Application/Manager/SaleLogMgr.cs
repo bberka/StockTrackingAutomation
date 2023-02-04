@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Application.Manager
 {
-    public class StockLogMgr
+    public class SaleLogMgr
     {
 
-		private StockLogMgr() { }
-		public static StockLogMgr This
+		private SaleLogMgr() { }
+		public static SaleLogMgr This
 		{
 			get
 			{
@@ -23,20 +23,18 @@ namespace Application.Manager
 				return Instance;
 			}
 		}
-		private static StockLogMgr? Instance;
+		private static SaleLogMgr? Instance;
 
-		public List<StockLog> GetValidList()
+		public List<SaleLog> GetValidList()
 		{
-            var list = StockLogDAL.This.GetList();
+            var list = SaleLogDAL.This.GetList();
             var products = ProductMgr.This.GetValidProducts().Select(x => x.ProductNo);
             list.RemoveAll(x => !products.Contains(x.ProductId));
 			return list;
         }
 
-		public Result AddStockLog(StockLog data,int userNo)
+		public Result AddSaleLog(SaleLog data)
 		{
-            data.RegisterDate = DateTime.Now;
-            data.UserId = userNo;
             var product = ProductDAL.This.Find(data.ProductId);
             if (product is null)
             {
@@ -48,16 +46,8 @@ namespace Application.Manager
                 return Result.Error(2, "Müşteri bulunamadı");
             }
             var totalPrice = data.PricePerUnit * data.Count;
-            if (data.Type == 1)
-            {
-                product.Stock += data.Count;
-                customer.Debt += totalPrice;
-            }
-            else if (data.Type == 2)
-            {
-                product.Stock -= data.Count;
-                customer.Debt -= totalPrice;
-            }
+            product.Stock -= data.Count;
+            customer.Debt += totalPrice;
             if (product.Stock < 0)
             {
                 return Result.Error(3, "Yeterli stok yok");
@@ -72,7 +62,7 @@ namespace Application.Manager
             {
                 return Result.Error(5, "DbError");
             }
-            var res = StockLogDAL.This.Add(data);
+            var res = SaleLogDAL.This.Add(data);
             if (!res)
             {
                 return Result.Error(6, "DbError");

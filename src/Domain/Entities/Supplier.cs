@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasMe.EFCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
@@ -6,16 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using EasMe.EFCore;
 
 namespace Domain.Entities
 {
-    public class Customer : IEfEntity
+    public class Supplier : IEfEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Müşteri No")]
-        public int CustomerNo { get; set; }
+        [Display(Name = "Tedarikçi No")]
+        public int SupplierNo { get; set; }
 
         [Display(Name = "Kayıt Tarihi")]
         public DateTime RegisterDate { get; set; } = DateTime.Now;
@@ -36,9 +36,9 @@ namespace Domain.Entities
         [MaxLength(32)]
         [Display(Name = "Tel No")]
         [DataType(DataType.PhoneNumber)]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
-        [Display(Name = "Alınacak Borç")]
+        [Display(Name = "Borç")]
         public double Debt { get; set; } = 0;
 
         [Display(Name = "Silinme Tarihi")]

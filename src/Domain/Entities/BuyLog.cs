@@ -10,7 +10,7 @@ using EasMe.EFCore;
 
 namespace Domain.Entities
 {
-    public class DebtLog : IEfEntity
+    public class BuyLog : IEfEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,32 +20,19 @@ namespace Domain.Entities
         [Display(Name = "Kayıt Tarihi")]
         public DateTime RegisterDate { get; set; } = DateTime.Now;
 
-        [Display(Name = "Kayıt Tipi")]
-        public byte Type { get; set; }
+        [Display(Name = "Ürün")]
+        [ForeignKey("Product")]
+        public int ProductId { get; set; }
 
-        [Display(Name = "Kayıt Tipi")]
-        public string TypeString
-        {
-            get
-            {
-                return Type switch
-                {
-                    1 => "Alınan",
-                    2 => "Verilen",
-                    _ => "Tanımlı Değil",
-                };
-            }
-        }
-        [ForeignKey("Customer")]
-        [Display(Name = "Müşteri No")]
-        public int? CustomerId { get; set; }
+        [Display(Name = "Ürün Sayısı")]
+        public long Count { get; set; }
 
+        [Display(Name = "Tedarikçi")]
         [ForeignKey("Supplier")]
-        [Display(Name = "Tedarikçi No")]
-        public int? SupplierId { get; set; }
+        public int SupplierId { get; set; }
 
-        [Display(Name = "Para Miktarı")]
-        public double Money { get; set; }
+        [Display(Name = "Birim Fiyat")]
+        public double PricePerUnit { get; set; }
 
         [MaxLength(1000)]
         [Display(Name = "Açıklama")]

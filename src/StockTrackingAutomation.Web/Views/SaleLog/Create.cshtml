@@ -1,25 +1,18 @@
 ﻿@using Domain.Models;
-@model StockLogCreateViewModel
+@model SaleLogCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Stok Kaydı Ekle</h1>
+<h1>Satış Kaydı Ekle</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-             <label asp-for="Data.Type" class="control-label"></label>
-            <select asp-for="Data.Type" class="form-select" aria-label="Seçiniz">
-              <option selected disabled value="0">Seçiniz</option>
-              <option value="1">Alınan</option>
-              <option value="2">Verilen</option>
-            </select>
-            <br />
             <label asp-for="Data.ProductId" class="control-label"></label>
             <select asp-for="Data.ProductId" class="form-select" aria-label="Seçiniz">
               <option selected disabled value="0">Seçiniz</option>

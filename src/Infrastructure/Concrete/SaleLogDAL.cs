@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DAL
 {
-	public class StockLogDAL : EfEntityRepositoryBase<StockLog, BusinessDbContext>, IEfEntityRepository<StockLog>
+	public class SaleLogDAL : EfEntityRepositoryBase<SaleLog, BusinessDbContext>, IEfEntityRepository<SaleLog>
 	{
-		private StockLogDAL() { }
-		public static StockLogDAL This
+		private SaleLogDAL() { }
+		public static SaleLogDAL This
 		{
 			get
 			{
@@ -19,6 +19,6 @@ namespace Infrastructure.DAL
 				return Instance;
 			}
 		}
-		private static StockLogDAL? Instance;
+		private static SaleLogDAL? Instance;
 	}
 }

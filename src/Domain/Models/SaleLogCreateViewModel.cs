@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class StockLogCreateViewModel
+    public class SaleLogCreateViewModel
     {
         public List<Product> Products { get; set; }
         public List<Customer> Customers { get; set; }
-        public StockLog Data { get; set; }
+        public SaleLog Data { get; set; }
     }
 }

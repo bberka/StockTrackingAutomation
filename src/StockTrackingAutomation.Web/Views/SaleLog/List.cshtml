@@ -1,12 +1,12 @@
 ﻿@using Application.Caching;
-@model IEnumerable<Domain.Entities.StockLog>
+@model IEnumerable<Domain.Entities.SaleLog>
 
 @{
     ViewData["Title"] = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Stok Takip Listesi</h1>
+<h1>Satış Takip Listesi</h1>
 
 <p>
     <a asp-action="Create">Yeni Kayıt Ekle</a>
@@ -19,9 +19,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RegisterDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProductId)
@@ -55,21 +52,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.RegisterDate)
-                </td>
-                <td>
-                    @if (item.Type == 1)
-                    {
-                        <div class="text-success">
-                            @Html.DisplayFor(modelItem => item.TypeString)
-
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-danger">
-                            @Html.DisplayFor(modelItem => item.TypeString)
-                        </div>
-                    }
                 </td>
                 <td>
                     @{
