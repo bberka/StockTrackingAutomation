@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using EasMe;
+using EasMe.Extensions;
 using Infrastructure.Caching;
 using Infrastructure.DAL;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,15 @@ namespace StockTrackingAutomation.Web.Controllers
         public IActionResult List()
         {
             DbCache.ProductCache.Refresh();
-            return View(DbCache.ProductCache.Get());
+            var res = DbCache.ProductCache.Get();
+            logger.Info("Product list count: " + res.Count);
+            return View(res);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
             var product = ProductDAL.This.Find(id);
+            logger.Info("Product edit: " + product.ToJsonString());
             return View(product);
         }
         [HttpPost]
@@ -30,6 +34,7 @@ namespace StockTrackingAutomation.Web.Controllers
             var current = ProductDAL.This.Find(product.ProductNo);
             if (current is null)
             {
+                logger.Info("Product edit: " + product.ToJsonString(),"Ürün bulunamadı");
                 ModelState.AddModelError("", "Ürün bulunamadı");
                 return View(product);
             }
@@ -38,6 +43,7 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = ProductDAL.This.Update(current);
             if (!res)
             {
+                logger.Warn("Product edit: " + product.ToJsonString(), res.ToJsonString());
                 ModelState.AddModelError("", "DbError");
                 return View(product);
             }
@@ -56,9 +62,10 @@ namespace StockTrackingAutomation.Web.Controllers
             if (!res)
             {
                 ModelState.AddModelError("", "DbError");
+                logger.Warn("Product edit: " + product.ToJsonString(), res.ToJsonString());
                 return View(product);
             }
-
+            logger.Info("Product add: " + product.ToJsonString(), res.ToJsonString());
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -73,9 +80,11 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = ProductDAL.This.Update(data);
             if (!res)
             {
+                logger.Warn("Product delete: " + id, res.ToJsonString());
                 ModelState.AddModelError("", "DbError");
                 return View(data);
             }
+            logger.Info("Product delete: " + id, res.ToJsonString());
             return RedirectToAction("List");
         }
     }

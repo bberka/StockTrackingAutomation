@@ -1,9 +1,13 @@
 ﻿using Domain.Entities;
 using Domain.Helpers;
 using Domain.Models;
+using EasMe;
+using EasMe.Extensions;
 using Infrastructure.DAL;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 using StockTrackingAutomation.Web.Filters;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace StockTrackingAutomation.Web.Controllers
@@ -11,12 +15,15 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter]
     public class StockLogController : Controller
     {
+        private static EasLog logger = EasLogFactory.CreateLogger(nameof(StockLogController));
+
         [HttpGet]
         public IActionResult List()
         {
             var list = StockLogDAL.This.GetList();
             var products = ProductDAL.This.GetValidProducts().Select(x => x.ProductNo);
             list.RemoveAll(x => !products.Contains(x.ProductId));
+            logger.Info("StockLog list: " + list.Count);
             return View(list);
         }
         [HttpGet]
@@ -38,7 +45,8 @@ namespace StockTrackingAutomation.Web.Controllers
             var product = ProductDAL.This.Find(data.ProductId);
             if(product is null)
             {
-                ModelState.AddModelError("", "Product:NotFound");
+                ModelState.AddModelError("", "Ürün bulunamadı");
+                logger.Warn("StockLog create: " + data.ToJsonString(),"Product not found");
                 return View(viewModel);
             }
             if (data.Type == 1)
@@ -51,6 +59,7 @@ namespace StockTrackingAutomation.Web.Controllers
             }
             if(product.Stock < 0)
             {
+                logger.Warn("StockLog create: " + data.ToJsonString(), "Not enough stock");
                 ModelState.AddModelError("", "Yeterli stok yok");
                 return View(viewModel);
             }
@@ -58,14 +67,17 @@ namespace StockTrackingAutomation.Web.Controllers
             if (!productUpdate)
             {
                 ModelState.AddModelError("", "DbError");
+                logger.Warn("StockLog create: " + data.ToJsonString(), "DbError");
                 return View(viewModel);
             }
             var res = StockLogDAL.This.Add(data);
             if (!res)
             {
                 ModelState.AddModelError("", "DbError");
+                logger.Warn("StockLog create: " + data.ToJsonString(), "DbError");
                 return View(viewModel);
             }
+            logger.Info("StockLog create: " + data.ToJsonString());
             return RedirectToAction("List");
         }
     }

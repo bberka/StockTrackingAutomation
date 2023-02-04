@@ -1,8 +1,10 @@
 ﻿using Domain.Helpers;
 using Domain.Models;
 using EasMe;
+using EasMe.Extensions;
 using Infrastructure.DAL;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 using StockTrackingAutomation.Web.Filters;
 using StockTrackingAutomation.Web.Models;
 using System.Diagnostics;
@@ -36,15 +38,19 @@ namespace StockTrackingAutomation.Web.Controllers
 			if (!res.IsSuccess)
 			{
 				ModelState.AddModelError("", res.Message);
-				return View(model);
+                logger.Warn("Login failed", res.ToJsonString());
+                return View(model);
 			}
 			HttpContext.SetUser(res.Data);
+			logger.Info("Login success", res.ToJsonString());
 			return RedirectToAction("Statistics");
 		}
 		[HttpGet]
         public IActionResult Logout()
         {
-			HttpContext.RemoveAuth();
+			var user = HttpContext.GetUser();
+            logger.Info("Logging out" , user.ToJsonString());
+            HttpContext.RemoveAuth();
             return RedirectToAction("Index");
         }
         [HttpGet]
@@ -54,17 +60,14 @@ namespace StockTrackingAutomation.Web.Controllers
 			return View();
 		}
 
-		[HttpGet]
-        public IActionResult Hash(string text)
-        {
-			var hash = Convert.ToBase64String(text.MD5Hash());
-            return Ok(hash);
-        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+			var err = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
+			logger.Error(err.ToJsonString());
+            return View();
 		}
 	}
 }

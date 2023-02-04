@@ -12,23 +12,28 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter(RoleType.Owner)]
     public class UserController : Controller
     {
+        private static EasLog logger = EasLogFactory.CreateLogger(nameof(UserController));
 
         [HttpGet]
         public IActionResult List()
         {
             DbCache.UserCache.Refresh();
-            return View(DbCache.UserCache.Get());
+            var list = DbCache.UserCache.Get();
+            logger.Info("User list count:" + list.Count);
+            return View();
         }
         [HttpGet]
         public IActionResult Details(int id)
         {
             var user = UserDAL.This.Find(id);
+            logger.Info("User details:" + id);
             return View(user);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
             var user = UserDAL.This.Find(id);
+            logger.Info("User edit:" + id);
             return View(user);
         }
         [HttpPost]
@@ -37,6 +42,7 @@ namespace StockTrackingAutomation.Web.Controllers
             var current = UserDAL.This.Find(user.UserNo);
             if(current is null)
             {
+                logger.Warn("User edit:" + user.ToJsonString(), "User not exist");
                 ModelState.AddModelError("", "User not exist");
                 return View(user);
             }
@@ -50,7 +56,7 @@ namespace StockTrackingAutomation.Web.Controllers
                 ModelState.AddModelError("", "DbError");
                 return View(user);
             }
-
+            logger.Info("User edit:" + user.ToJsonString());
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -65,9 +71,11 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = UserDAL.This.Add(user);
             if (!res)
             {
+                logger.Warn("User add:" + user.ToJsonString(), "DbError");
                 ModelState.AddModelError("", "DbError");
                 return View(user);
             }
+            logger.Info("User add:" + user.ToJsonString());
 
             return RedirectToAction("List");
         }
@@ -84,9 +92,11 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = UserDAL.This.Update(user);
             if (!res)
             {
+                logger.Warn("User delete:" + user.ToJsonString(), "DbError");
                 ModelState.AddModelError("", "DbError");
                 return View(user);
             }
+            logger.Info("User delete:" + user.ToJsonString());
             return RedirectToAction("List");
         }
     }
