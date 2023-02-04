@@ -13,21 +13,28 @@ namespace Domain.Entities
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; set; }
+        [Display(Name = "Kayıt No")]
+        public int Id { get; set; }
 
-		public DateTime RegisterDate { get; set; } = DateTime.Now;
+        [Display(Name = "Kayıt Tarihi")]
+        public DateTime RegisterDate { get; set; } = DateTime.Now;
 
-		public byte Type { get; set; }
+        [Display(Name = "Kayıt Tipi")]
+        public byte Type { get; set; }
 
-		[ForeignKey("Product")]
+        [Display(Name = "Ürün")]
+        [ForeignKey("Product")]
 		public int ProductId { get; set; }
 
-		public long Count { get; set; }
+        [Display(Name = "Sayı")]
+        public long Count { get; set; }
 
 		[MaxLength(1000)]
-		public string Description { get; set; }
+        [Display(Name = "Açıklama")]
+        public string Description { get; set; }
 
 		[ForeignKey("User")]
-		public int UserId { get; set; }
+        [Display(Name = "Kaydı Giren Kullanıcı")]
+        public int UserId { get; set; }
 	}
 }

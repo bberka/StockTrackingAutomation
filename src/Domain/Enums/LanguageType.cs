@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
-	public enum RoleType
-	{
-		Moderator = 1,
-		Owner = 2,
-	}
+    public enum LanguageType
+    {
+        Turkish,
+        English
+    }
 }

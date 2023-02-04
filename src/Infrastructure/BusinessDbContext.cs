@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols;
 using System;
@@ -23,6 +24,15 @@ namespace Infrastructure
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 
+		}
+		public static bool EnsureCreated()
+		{
+			var res = new BusinessDbContext().Database.EnsureCreated();
+			if (res)
+			{
+				UserDAL.This.AddDefaultUser();
+			}
+			return res;
 		}
 		public DbSet<Product> Products { get; set; }
 		public DbSet<User> Users { get; set; }

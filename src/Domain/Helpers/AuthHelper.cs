@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using EasMe.Extensions;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -28,6 +29,16 @@ namespace Domain.Helpers
                 throw new UnauthorizedAccessException();
             }
             return data;
+        }
+        public static RoleType GetRole(this HttpContext context)
+        {
+            var user = context.GetUser();
+            return (RoleType)user.RoleType;
+        }
+        public static bool IsInRole(this HttpContext context,RoleType roleType)
+        {
+            var role = context.GetRole();
+            return role == roleType;
         }
         public static void RemoveAuth(this HttpContext context)
         {

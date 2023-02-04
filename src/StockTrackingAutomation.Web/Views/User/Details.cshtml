@@ -1,11 +1,12 @@
-﻿@model Domain.Entities.User
+﻿@using Domain.Enums;
+@model Domain.Entities.User
 
 @{
     ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit User</h1>
+<h1>Kullanıcı Detay</h1>
 
 <hr />
 <div class="row">
@@ -64,14 +65,15 @@
             <br />
             <div class="form-group">
                 <label asp-for="RoleType" class="control-label"></label>
-                <input asp-for="RoleType" readonly class="form-control" />
+                <input value="@((RoleType)Model.RoleType)" readonly class="form-control" />
             </div>
         </form>
     </div>
 </div>
   <br />
+<br />
 <div>
-    <a asp-action="List">Back to List</a>
+    <a asp-action="List">Listeye Dön</a>
 </div>
 
 @section Scripts {

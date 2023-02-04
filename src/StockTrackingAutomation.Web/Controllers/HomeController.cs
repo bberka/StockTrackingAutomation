@@ -42,6 +42,12 @@ namespace StockTrackingAutomation.Web.Controllers
 			return RedirectToAction("Statistics");
 		}
 		[HttpGet]
+        public IActionResult Logout()
+        {
+			HttpContext.RemoveAuth();
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
 		[AuthFilter]
 		public IActionResult Statistics()
 		{

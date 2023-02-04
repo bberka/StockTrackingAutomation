@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Stock Change List</h1>
+<h1>Stok Takip Listesi</h1>
 
 <p>
-    <a asp-action="Create">Create Record</a>
+    <a asp-action="Create">Yeni Kayıt Ekle</a>
 </p>
 <table class="table">
     <thead>
@@ -56,7 +56,7 @@
                 @Html.DisplayFor(modelItem => item.UserId)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                @Html.ActionLink("Detay", "Details", new { id=item.Id }) |
             </td>
         </tr>
 }

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using EasMe;
 using EasMe.Extensions;
 using Infrastructure.DAL;
@@ -7,7 +8,7 @@ using StockTrackingAutomation.Web.Filters;
 
 namespace StockTrackingAutomation.Web.Controllers
 {
-    [AuthFilter]
+    [AuthFilter(RoleType.Owner)]
     public class UserController : Controller
     {
 

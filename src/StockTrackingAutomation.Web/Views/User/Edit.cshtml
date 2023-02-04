@@ -1,11 +1,12 @@
-﻿@model Domain.Entities.User
+﻿@using Domain.Enums;
+@model Domain.Entities.User
 
 @{
     ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit User</h1>
+<h1>Kullanıcı Düzenle</h1>
 
 <hr />
 <div class="row">
@@ -33,21 +34,26 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
              <br />
-            <div class="form-group">
-                <label asp-for="RoleType" class="control-label"></label>
-                <input asp-for="RoleType" class="form-control" />
-                <span asp-validation-for="RoleType" class="text-danger"></span>
-            </div>
+           
+            <label asp-for="RoleType" class="control-label"></label>
+            <select asp-for="RoleType" class="form-select" aria-label="Select role type">
+                <option selected disabled value="0">Select role type</option>
+                @foreach (RoleType role in (RoleType[])Enum.GetValues(typeof(RoleType)))
+                {
+                        <option value="@((int)role)">@role.ToString()</option>
+                }
+            </select>
             <br />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary w-100" />
+                <input type="submit" value="Kaydet" class="btn btn-primary w-100" />
             </div>
         </form>
     </div>
 </div>
   <br />
+<br />
 <div>
-    <a asp-action="List">Back to List</a>
+    <a asp-action="List">Listeye Dön</a>
 </div>
 
 @section Scripts {

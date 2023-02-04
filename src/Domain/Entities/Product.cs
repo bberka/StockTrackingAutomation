@@ -13,17 +13,26 @@ namespace Domain.Entities
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int ProductNo { get; set; }
+
+        [Display(Name = "Ürün No")]
+        public int ProductNo { get; set; }
 
 		[MaxLength(128)]
-		public string Name { get; set; }
+        [Display(Name = "Ürün Adı")]
+        public string Name { get; set; }
 
 		[MaxLength(512)]
-		public string Description { get; set; }
 
-		public long Stock { get; set; }
+        [Display(Name = "Açıklama")]
+        public string Description { get; set; }
 
-		public DateTime RegisterDate { get; set; } = DateTime.Now;
-		public DateTime? DeletedDate { get; set; }
+        [Display(Name = "Stok")]
+        public long Stock { get; set; }
+
+        [Display(Name = "Kayıt Tarihi")]
+        public DateTime RegisterDate { get; set; } = DateTime.Now;
+
+        [Display(Name = "Silinme Tarihi")]
+        public DateTime? DeletedDate { get; set; }
 	}
 }

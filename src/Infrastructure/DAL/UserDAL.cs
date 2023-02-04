@@ -40,15 +40,33 @@ namespace Infrastructure.DAL
 		}
 		public Result Register(User user)
 		{
+			var existEmail = Any(x => x.EmailAddress == user.EmailAddress);
+			if(existEmail)
+			{
+				return Result.Error(1, "AlreadyExist:Email");
+			}
 			var res = Add(user);
-			if (!res) return Result.Error(1, "DbError");
+			if (!res) return Result.Error(2, "DbError");
 			return Result.Success();
 		}
 		public Result UpdateUser(User user)
 		{
 			var res = Update(user);
-			if (!res) return Result.Error(1, "DbError");
+			if (!res) return Result.Error(3, "DbError");
 			return Result.Success();
+		}
+		public void AddDefaultUser()
+		{
+			var user = new User
+			{
+				EmailAddress = "admin@mail.com",
+				FailedPasswordCount = 0,
+				IsValid = true,
+				RegisterDate = DateTime.Now,
+				RoleType = 2,
+				Password = Convert.ToBase64String("admin".MD5Hash()),
+			};
+			Add(user);
 		}
 	}
 

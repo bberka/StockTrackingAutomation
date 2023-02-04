@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Add Stock Record</h1>
+<h1>Stok Kaydı Ekle</h1>
 
 <hr />
 <div class="row">
@@ -14,15 +14,15 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
              <label asp-for="Data.Type" class="control-label"></label>
-            <select asp-for="Data.Type" class="form-select" aria-label="Select type">
-              <option selected disabled value="0">Select type</option>
-              <option value="1">In</option>
-              <option value="2">Out</option>
+            <select asp-for="Data.Type" class="form-select" aria-label="Seçiniz">
+              <option selected disabled value="0">Seçiniz</option>
+              <option value="1">Giriş</option>
+              <option value="2">Çıkış</option>
             </select>
             <br />
             <label asp-for="Data.ProductId" class="control-label"></label>
-            <select asp-for="Data.ProductId" class="form-select" aria-label="Select product">
-              <option selected disabled value="0">Select product</option>
+            <select asp-for="Data.ProductId" class="form-select" aria-label="Seçiniz">
+              <option selected disabled value="0">Seçiniz</option>
                 @foreach(var p in Model.Products)
                 {
                     <option value="@p.ProductNo">@p.Name</option>
@@ -45,14 +45,14 @@
         
             <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary w-100" />
+                <input type="submit" value="Ekle" class="btn btn-primary w-100" />
             </div>
         </form>
     </div>
 </div>
 <br />
 <div>
-    <a asp-action="List">Back to List</a>
+    <a asp-action="List">Listeye Dön</a>
 </div>
 
 @section Scripts {
