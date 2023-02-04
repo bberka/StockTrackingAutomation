@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using EasMe;
+using Infrastructure.Caching;
 using Infrastructure.DAL;
 using Microsoft.AspNetCore.Mvc;
 using StockTrackingAutomation.Web.Filters;
@@ -14,8 +15,8 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var list = ProductDAL.This.GetList(x => !x.DeletedDate.HasValue);
-            return View(list);
+            DbCache.ProductCache.Refresh();
+            return View(DbCache.ProductCache.Get());
         }
         [HttpGet]
         public IActionResult Edit(int id)
@@ -26,7 +27,15 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpPost]
         public IActionResult Edit(Product product)
         {
-            var res = ProductDAL.This.Update(product);
+            var current = ProductDAL.This.Find(product.ProductNo);
+            if (current is null)
+            {
+                ModelState.AddModelError("", "Ürün bulunamadı");
+                return View(product);
+            }
+            current.Description = product.Description;
+            current.Name = product.Name;
+            var res = ProductDAL.This.Update(current);
             if (!res)
             {
                 ModelState.AddModelError("", "DbError");

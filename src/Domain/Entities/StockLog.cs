@@ -22,6 +22,22 @@ namespace Domain.Entities
         [Display(Name = "Kayıt Tipi")]
         public byte Type { get; set; }
 
+        public string TypeString 
+        { 
+            get
+            {
+                switch (Type)
+                {
+                    case 1:
+                        return "Giriş";
+                    case 2: 
+                        return "Çıkış";
+                    default:
+                        return "TanımlıDeğil";
+                }
+            } 
+        }
+
         [Display(Name = "Ürün")]
         [ForeignKey("Product")]
 		public int ProductId { get; set; }

@@ -55,6 +55,10 @@ namespace Infrastructure.DAL
 			if (!res) return Result.Error(3, "DbError");
 			return Result.Success();
 		}
+		public List<User> GetValidUsers()
+		{
+			return GetList(x => x.IsValid == true && !x.DeletedDate.HasValue);
+		}
 		public void AddDefaultUser()
 		{
 			var user = new User

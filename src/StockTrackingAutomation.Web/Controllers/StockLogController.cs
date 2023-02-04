@@ -4,6 +4,7 @@ using Domain.Models;
 using Infrastructure.DAL;
 using Microsoft.AspNetCore.Mvc;
 using StockTrackingAutomation.Web.Filters;
+using System.Linq;
 
 namespace StockTrackingAutomation.Web.Controllers
 {
@@ -13,8 +14,9 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            
             var list = StockLogDAL.This.GetList();
+            var products = ProductDAL.This.GetValidProducts().Select(x => x.ProductNo);
+            list.RemoveAll(x => !products.Contains(x.ProductId));
             return View(list);
         }
         [HttpGet]
@@ -29,6 +31,7 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpPost]
         public IActionResult Create(StockLogCreateViewModel viewModel)
         {
+            viewModel.Products = ProductDAL.This.GetList(x => !x.DeletedDate.HasValue);
             var data = viewModel.Data;
             data.RegisterDate = DateTime.Now;
             data.UserId = HttpContext.GetUser().UserNo;
@@ -42,9 +45,14 @@ namespace StockTrackingAutomation.Web.Controllers
             {
                 product.Stock += data.Count;
             }
-            else if(data.Type == 1)
+            else if(data.Type == 2)
             {
                 product.Stock -= data.Count;
+            }
+            if(product.Stock < 0)
+            {
+                ModelState.AddModelError("", "Yeterli stok yok");
+                return View(viewModel);
             }
             var productUpdate = ProductDAL.This.Update(product);
             if (!productUpdate)

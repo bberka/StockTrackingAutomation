@@ -27,8 +27,8 @@
             </div>
             <br />
             <label asp-for="RoleType" class="control-label"></label>
-            <select asp-for="RoleType" class="form-select" aria-label="Select role type">
-                <option selected disabled value="0">Select role type</option>
+            <select asp-for="RoleType" class="form-select" aria-label="Seçiniz">
+                <option selected disabled value="0">Seçiniz</option>
                 @foreach (RoleType role in (RoleType[])Enum.GetValues(typeof(RoleType)))
                 {
                     <option value="@((int)role)">@role.ToString()</option>

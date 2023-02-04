@@ -27,22 +27,6 @@
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.LastLoginIp)
-            </th>
-     
-            <th>
-                @Html.DisplayNameFor(model => model.LastLoginDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FailedPasswordCount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PasswordLastUpdateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeletedDate)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.RoleType)
             </th>
             <th></th>
@@ -63,23 +47,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.EmailAddress)
             </td>
+     
             <td>
-                @Html.DisplayFor(modelItem => item.LastLoginIp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLoginDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FailedPasswordCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswordLastUpdateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeletedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoleType)
+                @Html.DisplayFor(modelItem => item.RoleString)
             </td>
             <td>
                     @Html.ActionLink("Düzenle", "Edit", new { id=item.UserNo }) |

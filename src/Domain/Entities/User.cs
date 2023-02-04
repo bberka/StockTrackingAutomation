@@ -55,5 +55,14 @@ namespace Domain.Entities
         [Display(Name = "Rol")]
         public int RoleType { get; set; }
 
-	}
+        public string RoleString { get { 
+            switch(RoleType)
+                {
+                    case 1: return "Moderator";
+                    case 2: return "Owner";
+                    default: return "Geçersiz";
+                }
+            } }
+
+    }
 }

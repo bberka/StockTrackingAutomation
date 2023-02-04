@@ -24,7 +24,10 @@ namespace Infrastructure.DAL
 		}
 		private static ProductDAL? Instance;
 
-		
-	}
+        public List<Product> GetValidProducts()
+        {
+            return GetList(x => !x.DeletedDate.HasValue);
+        }
+    }
 
 }

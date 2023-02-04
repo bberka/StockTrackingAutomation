@@ -2,6 +2,7 @@
 using Domain.Enums;
 using EasMe;
 using EasMe.Extensions;
+using Infrastructure.Caching;
 using Infrastructure.DAL;
 using Microsoft.AspNetCore.Mvc;
 using StockTrackingAutomation.Web.Filters;
@@ -15,8 +16,8 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var list = UserDAL.This.GetList(x => x.IsValid == true && !x.DeletedDate.HasValue);
-            return View(list);
+            DbCache.UserCache.Refresh();
+            return View(DbCache.UserCache.Get());
         }
         [HttpGet]
         public IActionResult Details(int id)
