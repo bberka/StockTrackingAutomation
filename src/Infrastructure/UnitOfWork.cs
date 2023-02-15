@@ -14,11 +14,11 @@ public class UnitOfWork : IUnitOfWork
     {
         _disposed = false;
         _dbContext = new BusinessDbContext();
-        BuyLogs = new EntityRepositoryBase<BuyLog, BusinessDbContext>(_dbContext);
+        Purchases = new EntityRepositoryBase<Purchase, BusinessDbContext>(_dbContext);
         Customers = new EntityRepositoryBase<Customer, BusinessDbContext>(_dbContext);
         DebtLogs = new EntityRepositoryBase<DebtLog, BusinessDbContext>(_dbContext);
         Products = new EntityRepositoryBase<Product, BusinessDbContext>(_dbContext);
-        SaleLogs = new EntityRepositoryBase<SaleLog, BusinessDbContext>(_dbContext);
+        Sales = new EntityRepositoryBase<Sale, BusinessDbContext>(_dbContext);
         Suppliers = new EntityRepositoryBase<Supplier, BusinessDbContext>(_dbContext);
         Users = new EntityRepositoryBase<User, BusinessDbContext>(_dbContext);
 
@@ -31,11 +31,11 @@ public class UnitOfWork : IUnitOfWork
         _disposed = true;
     }
 
-    public IEntityRepository<BuyLog> BuyLogs { get; }
+    public IEntityRepository<Purchase> Purchases { get; }
     public IEntityRepository<Customer> Customers { get; }
     public IEntityRepository<DebtLog> DebtLogs { get; }
     public IEntityRepository<Product> Products { get; }
-    public IEntityRepository<SaleLog> SaleLogs { get; }
+    public IEntityRepository<Sale> Sales { get; }
     public IEntityRepository<Supplier> Suppliers { get; }
     public IEntityRepository<User> Users { get; }
     public bool Save()

@@ -1,11 +1,11 @@
-﻿@model IEnumerable<Domain.Entities.SaleLog>
+﻿@model IEnumerable<Domain.Entities.Purchase>
 
 @{
     ViewData["Title"] = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Satış Takip Listesi</h1>
+<h1>Alış Takip Listesi</h1>
 
 <p>
     <a asp-action="Create">Yeni Kayıt Ekle</a>
@@ -23,16 +23,13 @@
                 @Html.DisplayNameFor(model => model.ProductId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PricePerUnit)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Count)
             </th>
             <th>
-                Toplam Fiyat
+                @Html.DisplayNameFor(model => model.SupplierId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PricePerUnit)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
@@ -53,30 +50,27 @@
                     @Html.DisplayFor(modelItem => item.RegisterDate)
                 </td>
                 <td>
-                    
                     @Html.ActionLink(item.Product.Name,"Edit","Product", new { id = item.ProductId })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Count)
                 </td>
 
                 <td>
-                    
-                    @Html.ActionLink(item.Customer.CompanyName,"Details","Customer", new { id = item.CustomerId })
+                    @Html.ActionLink(item.Supplier.Name,"Edit","Supplier", new { id = item.SupplierId })
+                  
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PricePerUnit)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Count)
-                </td>
-                <td>
-                    @(item.Count * item.PricePerUnit)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.User.EmailAddress)
                 </td>
-               
+
             </tr>
         }
     </tbody>

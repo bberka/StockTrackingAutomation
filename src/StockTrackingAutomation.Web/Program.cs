@@ -27,13 +27,13 @@ builder.Services.AddDistributedMemoryCache();
 //    x.Filters.Add(new ExceptionHandleFilter());
 //});
 //ADD Business services dependency
-builder.Services.AddScoped<IBuyLogMgr, BuyLogMgr>();
-builder.Services.AddScoped<ICustomerMgr, CustomerMgr>();
-builder.Services.AddScoped<IDebtLogMgr, DebtLogMgr>();
-builder.Services.AddScoped<IProductMgr, ProductMgr>();
-builder.Services.AddScoped<ISaleLogMgr, SaleLogMgr>();
-builder.Services.AddScoped<ISupplierMgr, SupplierMgr>();
-builder.Services.AddScoped<IUserMgr, UserMgr>();
+builder.Services.AddScoped<IBuyLogMgr, PurchaseService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IDebtService, DebtService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISaleService, SaleService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDbContext<BusinessDbContext>();
 

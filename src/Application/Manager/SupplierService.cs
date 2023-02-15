@@ -4,7 +4,7 @@ using EasMe.Models;
 
 namespace Application.Manager
 {
-	public interface ISupplierMgr
+	public interface ISupplierService
     {
         Supplier? GetValidSupplier(int id);
         List<Supplier> GetValidSuppliers();
@@ -13,11 +13,11 @@ namespace Application.Manager
         Result UpdateSupplier(Supplier supplier);
     }
 
-    public class SupplierMgr : ISupplierMgr
+    public class SupplierService : ISupplierService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public SupplierMgr(IUnitOfWork unitOfWork)
+        public SupplierService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

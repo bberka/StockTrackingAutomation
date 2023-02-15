@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class BuyLog : IEntity
+    public class Purchase : IEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

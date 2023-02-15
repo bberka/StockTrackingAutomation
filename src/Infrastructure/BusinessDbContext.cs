@@ -29,10 +29,10 @@ namespace Infrastructure
 		}
 		public DbSet<Product> Products { get; set; }
 		public DbSet<User> Users { get; set; }
-		public DbSet<SaleLog> SaleLogs { get; set; }
+		public DbSet<Sale> Sales { get; set; }
 		public DbSet<Customer> Customers { get; set; }
 		public DbSet<DebtLog> DebtLogs { get; set; }
-		public DbSet<BuyLog> BuyLogs { get; set; }
+		public DbSet<Purchase> Purchases { get; set; }
 		public DbSet<Supplier> Suppliers { get; set; }
 	}
 }

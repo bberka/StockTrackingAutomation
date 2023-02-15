@@ -12,10 +12,10 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter(RoleType.Owner)]
     public class UserController : Controller
     {
-        private readonly IUserMgr _userMgr;
+        private readonly IUserService _userMgr;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
-        public UserController(IUserMgr userMgr)
+        public UserController(IUserService userMgr)
         {
             _userMgr = userMgr;
         }

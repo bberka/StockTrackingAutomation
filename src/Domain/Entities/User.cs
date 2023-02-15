@@ -5,7 +5,7 @@
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Kullanıcı No")]
-        public int UserNo { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Kullanıcı Geçerliliği")]
         public bool IsValid { get; set; } = true;

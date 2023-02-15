@@ -12,21 +12,22 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter(RoleType.Owner)]
     public class DebtLogController : Controller
     {
-        private readonly IDebtLogMgr _debtLogMgr;
-        private readonly ICustomerMgr _customerMgr;
+        private readonly IDebtService _debtService;
+        private readonly ICustomerService _customerService;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
         public DebtLogController(
-            IDebtLogMgr debtLogMgr,
-            ICustomerMgr customerMgr)
+            IDebtService debtService,
+            ICustomerService customerService
+            )
         {
-            _debtLogMgr = debtLogMgr;
-            _customerMgr = customerMgr;
+            _debtService = debtService;
+            _customerService = customerService;
         }
         [HttpGet]
         public IActionResult List()
         {
-            var list = _debtLogMgr.GetValidList();
+            var list = _debtService.GetValidList();
             logger.Info("DebtLogList: " + list.Count);
             return View(list);
         }
@@ -35,16 +36,16 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var res = new DebtLogCreateViewModel
             {
-                Customers = _customerMgr.GetValidCustomers()
+                Customers = _customerService.GetValidCustomers()
             };
             return View(res);
         }
         [HttpPost]
         public IActionResult Create(DebtLogCreateViewModel viewModel)
         {
-            viewModel.Customers = _customerMgr.GetValidCustomers();
-            var userNo = HttpContext.GetUser().UserNo;
-            var res = _debtLogMgr.AddNewRecord(viewModel.Data, userNo);
+            viewModel.Customers = _customerService.GetValidCustomers();
+            var userNo = HttpContext.GetUser().Id;
+            var res = _debtService.AddNewRecord(viewModel.Data, userNo);
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);

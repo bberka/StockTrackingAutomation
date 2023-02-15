@@ -11,6 +11,6 @@ namespace Domain.Models
     {
         public List<Product> Products { get; set; }
         public List<Supplier> Suppliers { get; set; }
-        public BuyLog Data { get; set; }
+        public Purchase Data { get; set; }
     }
 }

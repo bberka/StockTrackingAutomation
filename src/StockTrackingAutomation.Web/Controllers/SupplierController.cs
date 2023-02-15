@@ -11,10 +11,10 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter(RoleType.Owner)]
     public class SupplierController : Controller
     {
-        private readonly ISupplierMgr _supplierMgr;
+        private readonly ISupplierService _supplierMgr;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
-        public SupplierController(ISupplierMgr supplierMgr)
+        public SupplierController(ISupplierService supplierMgr)
         {
             _supplierMgr = supplierMgr;
         }

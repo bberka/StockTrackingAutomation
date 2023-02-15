@@ -6,7 +6,7 @@ using EasMe.Models;
 
 namespace Application.Manager
 {
-    public interface IUserMgr
+    public interface IUserService
     {
         ResultData<User> Login(LoginModel model);
         Result Register(User user);
@@ -16,11 +16,11 @@ namespace Application.Manager
         User? GetUser(int id);
     }
 
-    public class UserMgr : IUserMgr
+    public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserMgr(IUnitOfWork unitOfWork)
+        public UserService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -57,7 +57,7 @@ namespace Application.Manager
         }
         public Result UpdateUser(User user)
         {
-            var current = _unitOfWork.Users.Find(user.UserNo);
+            var current = _unitOfWork.Users.Find(user.Id);
             if (current is null)
             {
                 return Result.Error(1, "Kullanıcı bulunamadı");

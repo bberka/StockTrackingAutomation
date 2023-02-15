@@ -7,28 +7,28 @@ namespace Application.Manager
 {
     public interface IBuyLogMgr
     {
-        List<BuyLog> GetValidList();
-        Result AddBuyLog(BuyLog data);
+        List<Purchase> GetValidList();
+        Result AddBuyLog(Purchase data);
     }
 
-    public class BuyLogMgr : IBuyLogMgr
+    public class PurchaseService : IBuyLogMgr
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IProductMgr _productMgr;
-        private readonly ISupplierMgr _supplierMgr;
+        private readonly IProductService _productMgr;
+        private readonly ISupplierService _supplierMgr;
 
-        public BuyLogMgr(
+        public PurchaseService(
             IUnitOfWork unitOfWork,
-            IProductMgr productMgr,
-            ISupplierMgr supplierMgr)
+            IProductService productMgr,
+            ISupplierService supplierMgr)
         {
             _unitOfWork = unitOfWork;
             _productMgr = productMgr;
             _supplierMgr = supplierMgr;
         }
-        public List<BuyLog> GetValidList()
+        public List<Purchase> GetValidList()
         {
-            var list = _unitOfWork.BuyLogs.Get()
+            var list = _unitOfWork.Purchases.Get()
                 .Include(x => x.Product)
                 .Include(x => x.Supplier)
                 .Include(x => x.User)
@@ -40,7 +40,7 @@ namespace Application.Manager
             return list;
         }
 
-        public Result AddBuyLog(BuyLog data)
+        public Result AddBuyLog(Purchase data)
         {
             var product = _unitOfWork.Products.Find(data.ProductId);
             if (product is null)
@@ -57,7 +57,7 @@ namespace Application.Manager
             var totalPrice = data.PricePerUnit * data.Count;
             supplier.Debt += totalPrice;
             _unitOfWork.Suppliers.Update(supplier);
-            _unitOfWork.BuyLogs.Add(data);
+            _unitOfWork.Purchases.Add(data);
             var res = _unitOfWork.Save();
             if (!res)
             {

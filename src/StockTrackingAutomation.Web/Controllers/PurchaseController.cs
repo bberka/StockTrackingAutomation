@@ -12,17 +12,17 @@ using StockTrackingAutomation.Web.Filters;
 namespace StockTrackingAutomation.Web.Controllers
 {
     [AuthFilter(RoleType.Owner)]
-    public class BuyLogController : Controller
+    public class PurchaseController : Controller
     {
         private readonly IBuyLogMgr _buyLogMgr;
-        private readonly ISupplierMgr _supplierMgr;
-        private readonly IProductMgr _productMgr;
+        private readonly ISupplierService _supplierMgr;
+        private readonly IProductService _productMgr;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
-        public BuyLogController(
+        public PurchaseController(
             IBuyLogMgr buyLogMgr,
-            ISupplierMgr supplierMgr,
-            IProductMgr productMgr)
+            ISupplierService supplierMgr,
+            IProductService productMgr)
         {
             _buyLogMgr = buyLogMgr;
             _supplierMgr = supplierMgr;
@@ -51,7 +51,7 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             viewModel.Products = _productMgr.GetValidProducts();
             viewModel.Suppliers = _supplierMgr.GetValidSuppliers();
-            var userNo = HttpContext.GetUser().UserNo;
+            var userNo = HttpContext.GetUser().Id;
             viewModel.Data.UserId = userNo;
             var res = _buyLogMgr.AddBuyLog(viewModel.Data);
             if (!res.IsSuccess)

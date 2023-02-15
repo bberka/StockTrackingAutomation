@@ -12,10 +12,10 @@ namespace StockTrackingAutomation.Web.Controllers
 {
 	public class HomeController : Controller
     {
-        private readonly IUserMgr _userMgr;
+        private readonly IUserService _userMgr;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
-        public HomeController(IUserMgr userMgr)
+        public HomeController(IUserService userMgr)
         {
             _userMgr = userMgr;
         }

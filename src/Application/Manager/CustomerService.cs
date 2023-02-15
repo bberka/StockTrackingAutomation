@@ -4,7 +4,7 @@ using EasMe.Models;
 
 namespace Application.Manager
 {
-    public interface ICustomerMgr
+    public interface ICustomerService
     {
         List<Customer> GetValidCustomers();
         ResultData<Customer> GetValidCustomer(int id);
@@ -13,11 +13,11 @@ namespace Application.Manager
         Result DeleteCustomer(int id);
     }
 
-    public class CustomerMgr : ICustomerMgr
+    public class CustomerService : ICustomerService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CustomerMgr(IUnitOfWork unitOfWork)
+        public CustomerService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

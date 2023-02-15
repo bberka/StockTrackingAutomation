@@ -11,31 +11,31 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter(RoleType.Owner)]
     public class CustomerController : Controller
     {
-        private readonly ICustomerMgr _customerMgr;
+        private readonly ICustomerService _customerService;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
-        public CustomerController(ICustomerMgr customerMgr)
+        public CustomerController(ICustomerService customerService)
         {
-            _customerMgr = customerMgr;
+            _customerService = customerService;
         }
         [HttpGet]
         public IActionResult List()
         {
-            var list = _customerMgr.GetValidCustomers();
+            var list = _customerService.GetValidCustomers();
             logger.Info("Customer list count:" + list.Count);
             return View(list);
         }
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var user = _customerMgr.GetValidCustomer(id);
+            var user = _customerService.GetValidCustomer(id);
             logger.Info("Customer details:" + id);
             return View(user);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var user = _customerMgr.GetValidCustomer(id);
+            var user = _customerService.GetValidCustomer(id);
             logger.Info("Customer edit:" + id);
             return View(user);
         }
@@ -43,7 +43,7 @@ namespace StockTrackingAutomation.Web.Controllers
         public IActionResult Edit(Customer customer)
         {
            
-            var res = _customerMgr.UpdateCustomer(customer);
+            var res = _customerService.UpdateCustomer(customer);
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
@@ -61,7 +61,7 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpPost]
         public IActionResult Create(Customer customer)
         {
-            var res = _customerMgr.AddCustomer(customer);
+            var res = _customerService.AddCustomer(customer);
             if (!res.IsSuccess)
             {
                 logger.Warn("customer add:" + customer.ToJsonString(), res.ToJsonString());
@@ -74,7 +74,7 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var res = _customerMgr.DeleteCustomer(id);
+            var res = _customerService.DeleteCustomer(id);
             if (!res.IsSuccess)
             {
                 logger.Warn("Customer delete:" + id, res.ToJsonString());

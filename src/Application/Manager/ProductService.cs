@@ -4,7 +4,7 @@ using EasMe.Models;
 
 namespace Application.Manager
 {
-    public interface IProductMgr
+    public interface IProductService
     {
         List<Product> GetValidProducts();
         Product? GetProduct(int id);
@@ -13,11 +13,11 @@ namespace Application.Manager
         Result DeleteProduct(int id);
     }
 
-    public class ProductMgr : IProductMgr
+    public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public ProductMgr(IUnitOfWork unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

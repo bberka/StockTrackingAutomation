@@ -4,30 +4,30 @@ using EasMe.Models;
 
 namespace Application.Manager
 {
-    public interface IDebtLogMgr
+    public interface IDebtService
     {
         Result AddNewRecord(DebtLog log, int id);
         List<DebtLog> GetValidList();
     }
 
-    public class DebtLogMgr : IDebtLogMgr
+    public class DebtService : IDebtService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICustomerMgr _customerMgr;
-        private readonly ISupplierMgr _supplierMgr;
+        private readonly ICustomerService _customerService;
+        private readonly ISupplierService _supplierService;
 
-        public DebtLogMgr(
+        public DebtService(
             IUnitOfWork unitOfWork,
-            ICustomerMgr customerMgr,
-            ISupplierMgr supplierMgr)
+            ICustomerService customerService,
+            ISupplierService supplierService)
         {
             _unitOfWork = unitOfWork;
-            _customerMgr = customerMgr;
-            _supplierMgr = supplierMgr;
+            _customerService = customerService;
+            _supplierService = supplierService;
         }
         public Result AddNewRecord(DebtLog log, int id)
         {
-            var customerResult = _customerMgr.GetValidCustomer(log.CustomerId.Value);
+            var customerResult = _customerService.GetValidCustomer(log.CustomerId.Value);
             if (customerResult.IsFailure)
             {
                 return customerResult.ToResult(100);
@@ -58,8 +58,8 @@ namespace Application.Manager
         public List<DebtLog> GetValidList()
         {
             var list = _unitOfWork.DebtLogs.GetList();
-            var customers = _customerMgr.GetValidCustomers().Select(x => x.Id).ToList();
-            var suppliers = _supplierMgr.GetValidSuppliers().Select(x => x.Id).ToList();
+            var customers = _customerService.GetValidCustomers().Select(x => x.Id).ToList();
+            var suppliers = _supplierService.GetValidSuppliers().Select(x => x.Id).ToList();
             foreach(var item in list)
             {
                 if(item.CustomerId != null)

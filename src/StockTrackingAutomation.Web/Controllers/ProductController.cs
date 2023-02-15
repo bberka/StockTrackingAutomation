@@ -10,10 +10,10 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter]
     public class ProductController : Controller
     {
-        private readonly IProductMgr _productMgr;
+        private readonly IProductService _productMgr;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
-        public ProductController(IProductMgr productMgr)
+        public ProductController(IProductService productMgr)
         {
             _productMgr = productMgr;
         }

@@ -10,26 +10,27 @@ using StockTrackingAutomation.Web.Filters;
 namespace StockTrackingAutomation.Web.Controllers
 {
     [AuthFilter(RoleType.Owner)]
-    public class SaleLogController : Controller
+    public class SaleController : Controller
     {
-        private readonly ISaleLogMgr _saleLogMgr;
-        private readonly IProductMgr _productMgr;
-        private readonly ICustomerMgr _customerMgr;
+        private readonly ISaleService _saleService;
+        private readonly IProductService _productService;
+        private readonly ICustomerService _customerService;
+
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
-        public SaleLogController(
-            ISaleLogMgr saleLogMgr,
-            IProductMgr productMgr,
-            ICustomerMgr customerMgr)
+        public SaleController(
+            ISaleService saleService,
+            IProductService productService,
+            ICustomerService customerService)
         {
-            _saleLogMgr = saleLogMgr;
-            _productMgr = productMgr;
-            _customerMgr = customerMgr;
+            _saleService = saleService;
+            _productService = productService;
+            _customerService = customerService;
         }
         [HttpGet]
         public IActionResult List()
         {
-            var list = _saleLogMgr.GetValidList();
+            var list = _saleService.GetValidList();
             logger.Info("SaleLogList: " + list.Count);
             return View(list);
         }
@@ -38,19 +39,19 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var res = new SaleLogCreateViewModel
             {
-                Products = _productMgr.GetValidProducts(),
-                Customers = _customerMgr.GetValidCustomers()
+                Products = _productService.GetValidProducts(),
+                Customers = _customerService.GetValidCustomers()
             };
             return View(res);
         }
         [HttpPost]
         public IActionResult Create(SaleLogCreateViewModel viewModel)
         {
-            viewModel.Products = _productMgr.GetValidProducts();
-            viewModel.Customers = _customerMgr.GetValidCustomers();
-            var userNo = HttpContext.GetUser().UserNo;
+            viewModel.Products = _productService.GetValidProducts();
+            viewModel.Customers = _customerService.GetValidCustomers();
+            var userNo = HttpContext.GetUser().Id;
             viewModel.Data.UserId = userNo;
-            var res = _saleLogMgr.AddSaleLog(viewModel.Data);
+            var res = _saleService.AddSaleLog(viewModel.Data);
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
