@@ -1,13 +1,6 @@
 ﻿using Domain.Entities;
-using Infrastructure.DAL;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
@@ -28,10 +21,10 @@ namespace Infrastructure
 		public static bool EnsureCreated()
 		{
 			var res = new BusinessDbContext().Database.EnsureCreated();
-			if (res)
-			{
-				UserDAL.This.AddDefaultUser();
-			}
+			//if (res)
+			//{
+			//	UserDAL.This.AddDefaultUser();
+			//}
 			return res;
 		}
 		public DbSet<Product> Products { get; set; }

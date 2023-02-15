@@ -1,50 +1,53 @@
-﻿using Domain.Entities;
-using Domain.ValueObjects;
-using Infrastructure.DAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Abstract;
+using Domain.Entities;
+using EasMe.Models;
 
 namespace Application.Manager
 {
-    public class CustomerMgr
+    public interface ICustomerMgr
     {
-        private CustomerMgr() { }
-        public static CustomerMgr This
-        {
-            get
-            {
-                Instance ??= new();
-                return Instance;
-            }
-        }
-        private static CustomerMgr? Instance;
+        List<Customer> GetValidCustomers();
+        ResultData<Customer> GetValidCustomer(int id);
+        Result UpdateCustomer(Customer customer);
+        Result AddCustomer(Customer customer);
+        Result DeleteCustomer(int id);
+    }
 
+    public class CustomerMgr : ICustomerMgr
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CustomerMgr(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
         public List<Customer> GetValidCustomers()
         {
-            return CustomerDAL.This.GetList(x => !x.DeletedDate.HasValue);
+            return _unitOfWork.Customers.GetList(x => !x.DeletedDate.HasValue);
         }
-        public Customer GetValidCustomer(int id)
+        public ResultData<Customer> GetValidCustomer(int id)
         {
-            var customer = CustomerDAL.This.Find(id);
-            if (customer == null) throw new NullReferenceException("Customer is NULL");
+            var customer = _unitOfWork.Customers.Find(id);
+            if (customer == null) return Result.Error(1, "Müşteri bulunamadı");
+            if (customer.DeletedDate.HasValue) return Result.Error(2, "Müşteri silinmiş");
             return customer;
         }
 
         public Result UpdateCustomer(Customer customer)
         {
-            var exist = GetValidCustomer(customer.CustomerNo);
-            if (exist == null)
+            var customerResult = GetValidCustomer(customer.Id);
+            if (customerResult.IsFailure)
             {
-                return Result.Error(1, "Müşteri bulunamadı");
+                return customerResult.ToResult(100);
             }
-            exist.PhoneNumber = customer.PhoneNumber;
-            exist.CompanyName = customer.CompanyName;
-            exist.EmailAddress = customer.EmailAddress;
-            exist.Name = customer.Name;
-            var res = CustomerDAL.This.Update(exist);
+
+            var existingCustomer = customerResult.Data;
+            existingCustomer.PhoneNumber = customer.PhoneNumber;
+            existingCustomer.CompanyName = customer.CompanyName;
+            existingCustomer.EmailAddress = customer.EmailAddress;
+            existingCustomer.Name = customer.Name;
+            _unitOfWork.Customers.Update(existingCustomer);
+            var res = _unitOfWork.Save();
             if (!res)
             {
                 return Result.Error(2, "DbError");
@@ -54,12 +57,13 @@ namespace Application.Manager
 
         public Result AddCustomer(Customer customer)
         {
-            var exist = CustomerDAL.This.Any(x => x.CompanyName == customer.CompanyName);
+            var exist = _unitOfWork.Customers.Any(x => x.CompanyName == customer.CompanyName);
             if (exist)
             {
                 return Result.Error(1, "Müşteri şirket zaten ekli");
             }
-            var res = CustomerDAL.This.Add(customer);
+            _unitOfWork.Customers.Add(customer);
+            var res = _unitOfWork.Save();
             if (!res)
 
             {
@@ -70,18 +74,20 @@ namespace Application.Manager
 
         public Result DeleteCustomer(int id)
         {
-            var current = GetValidCustomer(id);
-            if (current is null)
+            var customerResult = GetValidCustomer(id);
+            if (customerResult.IsFailure)
             {
-                return Result.Error(1, "Müşteri bulunamadı");
+                return customerResult.ToResult(100);
             }
-            current.DeletedDate = DateTime.Now;
-            var res = CustomerDAL.This.Update(current);
-            if (!res) { 
-
+            var customer = customerResult.Data;
+            customer.DeletedDate = DateTime.Now;
+            _unitOfWork.Customers.Update(customer);
+            var res = _unitOfWork.Save();
+            if (!res)
+            {
                 return Result.Error(2, "DbError");
-        }
+            }
             return Result.Success();
         }
-}
+    }
 }

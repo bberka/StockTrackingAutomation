@@ -1,60 +1,61 @@
-﻿using Domain.Entities;
-using Domain.ValueObjects;
-using Infrastructure.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Abstract;
+using Domain.Entities;
+using EasMe.Models;
 
 namespace Application.Manager
 {
-    public class SupplierMgr
+	public interface ISupplierMgr
     {
+        Supplier? GetValidSupplier(int id);
+        List<Supplier> GetValidSuppliers();
+        Result AddSupplier(Supplier supplier);
+        Result RemoveSupplier(int id);
+        Result UpdateSupplier(Supplier supplier);
+    }
 
-		private SupplierMgr() { }
-		public static SupplierMgr This
-		{
-			get
-			{
-				Instance ??= new();
-				return Instance;
-			}
-		}
-		private static SupplierMgr? Instance;
+    public class SupplierMgr : ISupplierMgr
+    {
+        private readonly IUnitOfWork _unitOfWork;
 
+        public SupplierMgr(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
 		public Supplier? GetValidSupplier(int id)
 		{
-			return SupplierDAL.This.Find(id);
+			return _unitOfWork.Suppliers.Find(id);
 		}
 		public List<Supplier> GetValidSuppliers()
 		{
-			return SupplierDAL.This.GetList(x => !x.DeletedDate.HasValue);
+			return _unitOfWork.Suppliers.GetList(x => !x.DeletedDate.HasValue);
 		}
 		public Result AddSupplier(Supplier supplier)
 		{
-			var res = SupplierDAL.This.Add(supplier);
-			if (!res) return Result.Error(1, "DbError");
+			_unitOfWork.Suppliers.Add(supplier);
+            var res = _unitOfWork.Save();
+            if (!res) return Result.Error(1, "DbError");
 			return Result.Success();
 		}
 		public Result RemoveSupplier(int id)
 		{
-			var exist = SupplierDAL.This.Find(id);
+			var exist = _unitOfWork.Suppliers.Find(id);
 			if (exist is null) return Result.Error(1, "Tedarikçi bulunamadı");
 			exist.DeletedDate = DateTime.Now;
-			var res = SupplierDAL.This.Update(exist);
-			if (!res) return Result.Error(2, "DbError");
+			_unitOfWork.Suppliers.Update(exist);
+            var res = _unitOfWork.Save();
+            if (!res) return Result.Error(2, "DbError");
 			return Result.Success();
 		}
 		public Result UpdateSupplier(Supplier supplier)
 		{
-			var exist = SupplierDAL.This.Find(supplier.SupplierNo);
+			var exist = _unitOfWork.Suppliers.Find(supplier.Id);
 			if (exist is null) return Result.Error(1, "Tedarikçi bulunamadı");
 			exist.Name = supplier.Name;
 			exist.CompanyName = supplier.CompanyName;
 			exist.PhoneNumber = supplier.PhoneNumber;
 			exist.EmailAddress = supplier.EmailAddress;
-			var res = SupplierDAL.This.Update(exist);
+			_unitOfWork.Suppliers.Update(exist);
+            var res = _unitOfWork.Save();
             if (!res) return Result.Error(2, "DbError");
             return Result.Success();
         }

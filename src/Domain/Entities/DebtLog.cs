@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using EasMe.EFCore;
+﻿
 
 namespace Domain.Entities
 {
-    public class DebtLog : IEfEntity
+ 
+    public class DebtLog : IEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -54,5 +47,9 @@ namespace Domain.Entities
         [ForeignKey("User")]
         [Display(Name = "Kaydı Giren Kullanıcı")]
         public int UserId { get; set; }
+
+        public virtual Customer Customer { get; set; }
+        public virtual Supplier Supplier { get; set; }
+        public virtual User User { get; set; }
     }
 }

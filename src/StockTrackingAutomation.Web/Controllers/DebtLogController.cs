@@ -1,28 +1,32 @@
 ﻿using Application.Manager;
-using Domain.Entities;
 using Domain.Enums;
 using Domain.Helpers;
 using Domain.Models;
-using EasMe;
 using EasMe.Extensions;
-using Infrastructure.DAL;
+using EasMe.Logging;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
 using StockTrackingAutomation.Web.Filters;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace StockTrackingAutomation.Web.Controllers
 {
     [AuthFilter(RoleType.Owner)]
     public class DebtLogController : Controller
     {
-        private static EasLog logger = EasLogFactory.CreateLogger(nameof(DebtLogController));
+        private readonly IDebtLogMgr _debtLogMgr;
+        private readonly ICustomerMgr _customerMgr;
+        private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
+        public DebtLogController(
+            IDebtLogMgr debtLogMgr,
+            ICustomerMgr customerMgr)
+        {
+            _debtLogMgr = debtLogMgr;
+            _customerMgr = customerMgr;
+        }
         [HttpGet]
         public IActionResult List()
         {
-            var list = DebtLogMgr.This.GetValidList();
+            var list = _debtLogMgr.GetValidList();
             logger.Info("DebtLogList: " + list.Count);
             return View(list);
         }
@@ -31,19 +35,19 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var res = new DebtLogCreateViewModel
             {
-                Customers = CustomerMgr.This.GetValidCustomers()
+                Customers = _customerMgr.GetValidCustomers()
             };
             return View(res);
         }
         [HttpPost]
         public IActionResult Create(DebtLogCreateViewModel viewModel)
         {
-            viewModel.Customers = CustomerMgr.This.GetValidCustomers();
+            viewModel.Customers = _customerMgr.GetValidCustomers();
             var userNo = HttpContext.GetUser().UserNo;
-            var res = DebtLogMgr.This.AddNewRecord(viewModel.Data, userNo);
+            var res = _debtLogMgr.AddNewRecord(viewModel.Data, userNo);
             if (!res.IsSuccess)
             {
-                ModelState.AddModelError("", res.Message);
+                ModelState.AddModelError("", res.ErrorCode);
                 logger.Warn("DebtLogCreate:" + viewModel.Data.ToJsonString(), res.ToJsonString());
                 return View(viewModel);
             }

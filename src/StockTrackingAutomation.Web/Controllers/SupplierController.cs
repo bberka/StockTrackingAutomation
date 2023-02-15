@@ -1,9 +1,8 @@
-﻿using Application.Caching;
-using Application.Manager;
+﻿using Application.Manager;
 using Domain.Entities;
 using Domain.Enums;
-using EasMe;
 using EasMe.Extensions;
+using EasMe.Logging;
 using Microsoft.AspNetCore.Mvc;
 using StockTrackingAutomation.Web.Filters;
 
@@ -12,13 +11,17 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter(RoleType.Owner)]
     public class SupplierController : Controller
     {
-        private static EasLog logger = EasLogFactory.CreateLogger(nameof(SupplierController));
+        private readonly ISupplierMgr _supplierMgr;
+        private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
+        public SupplierController(ISupplierMgr supplierMgr)
+        {
+            _supplierMgr = supplierMgr;
+        }
         [HttpGet]
         public IActionResult List()
         {
-            DbCache.SupplierCache.Refresh();
-            var list = DbCache.SupplierCache.Get();
+            var list = _supplierMgr.GetValidSuppliers();
             logger.Info("Supplier count:" + list.Count);
             return View(list);
         }
@@ -30,11 +33,11 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpPost]
         public IActionResult Create(Supplier data)
         {
-            var res = SupplierMgr.This.AddSupplier(data);
+            var res = _supplierMgr.AddSupplier(data);
             if (!res.IsSuccess)
             {
                 logger.Warn("Supplier add:" + data.ToJsonString(), res.ToJsonString());
-                ModelState.AddModelError("", res.Message);
+                ModelState.AddModelError("", res.ErrorCode);
                 return View(data);
             }
             logger.Info("Supplier add:" + data.ToJsonString());
@@ -43,7 +46,7 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var res = SupplierMgr.This.RemoveSupplier(id);
+            var res = _supplierMgr.RemoveSupplier(id);
             if (!res.IsSuccess)
             {
                 logger.Warn("Supplier delete:" + id, res.ToJsonString());
@@ -59,24 +62,24 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var data = SupplierMgr.This.GetValidSupplier(id);
+            var data = _supplierMgr.GetValidSupplier(id);
             logger.Info("Supplier details:" + id);
             return View(data);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var data = SupplierMgr.This.GetValidSupplier(id);
+            var data = _supplierMgr.GetValidSupplier(id);
             logger.Info("Data edit:" + id);
             return View(data);
         }
         [HttpPost]
         public IActionResult Edit(Supplier data)
         {
-            var res = SupplierMgr.This.UpdateSupplier(data);
+            var res = _supplierMgr.UpdateSupplier(data);
             if (!res.IsSuccess)
             {
-                ModelState.AddModelError("", res.Message);
+                ModelState.AddModelError("", res.ErrorCode);
                 logger.Warn("Supplier edit:" + data.ToJsonString(), res.ToJsonString());
                 return View(data);
             }

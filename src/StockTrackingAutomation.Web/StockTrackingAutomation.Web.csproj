@@ -28,7 +28,13 @@
 
   <ItemGroup>
     <Reference Include="EasMe">
-      <HintPath>E:\Repos\easme-lib\EasMe\bin\Release\net6.0\EasMe.dll</HintPath>
+      <HintPath>E:\Repos\easme-lib\bin\Release\net6.0\EasMe.dll</HintPath>
+    </Reference>
+    <Reference Include="EasMe.Authorization">
+      <HintPath>..\..\..\easme-lib\bin\Release\net6.0\EasMe.Authorization.dll</HintPath>
+    </Reference>
+    <Reference Include="EasMe.Logging">
+      <HintPath>E:\Repos\easme-lib\bin\Release\net6.0\EasMe.Logging.dll</HintPath>
     </Reference>
   </ItemGroup>
 

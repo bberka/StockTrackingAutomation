@@ -72,11 +72,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Product", b =>
                 {
-                    b.Property<int>("ProductNo")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductNo"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
@@ -97,7 +97,7 @@ namespace Infrastructure.Migrations
                     b.Property<long>("Stock")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ProductNo");
+                    b.HasKey("Id");
 
                     b.ToTable("Products");
                 });

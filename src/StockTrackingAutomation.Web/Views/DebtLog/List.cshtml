@@ -1,5 +1,4 @@
-﻿@using Application.Caching;
-@model IEnumerable<Domain.Entities.DebtLog>
+﻿@model IEnumerable<Domain.Entities.DebtLog>
 
 @{
     ViewData["Title"] = "List";
@@ -64,10 +63,7 @@
                     }
                 </td>
                 <td>
-                    @{
-                        var customerFirmName = DbCache.GetCustomerName(item.CustomerId.Value);
-                    }
-                    @Html.ActionLink(customerFirmName,"Details","Customer", new { id = item.CustomerId })
+                    @Html.ActionLink(item.Customer.CompanyName,"Details","Customer", new { id = item.CustomerId })
                 </td>
 
                 <td>
@@ -78,10 +74,8 @@
                 </td>
 
                 <td>
-                    @{
-                        var userName = DbCache.GetUserEmail(item.UserId);
-                    }
-                    @Html.DisplayFor(modelItem => userName)
+                    
+                    @Html.DisplayFor(modelItem => item.User.EmailAddress)
                 </td>
 
             </tr>

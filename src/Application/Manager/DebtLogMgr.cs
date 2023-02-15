@@ -1,51 +1,54 @@
-﻿using Domain.Entities;
-using Domain.ValueObjects;
-using Infrastructure.Concrete;
-using Infrastructure.DAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Abstract;
+using Domain.Entities;
+using EasMe.Models;
 
 namespace Application.Manager
 {
-    public class DebtLogMgr
+    public interface IDebtLogMgr
     {
-        private DebtLogMgr() { }
-        public static DebtLogMgr This
-        {
-            get
-            {
-                Instance ??= new();
-                return Instance;
-            }
-        }
-        private static DebtLogMgr? Instance;
+        Result AddNewRecord(DebtLog log, int id);
+        List<DebtLog> GetValidList();
+    }
 
+    public class DebtLogMgr : IDebtLogMgr
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICustomerMgr _customerMgr;
+        private readonly ISupplierMgr _supplierMgr;
+
+        public DebtLogMgr(
+            IUnitOfWork unitOfWork,
+            ICustomerMgr customerMgr,
+            ISupplierMgr supplierMgr)
+        {
+            _unitOfWork = unitOfWork;
+            _customerMgr = customerMgr;
+            _supplierMgr = supplierMgr;
+        }
         public Result AddNewRecord(DebtLog log, int id)
         {
-
-            var customer = CustomerMgr.This.GetValidCustomer(log.CustomerId.Value);
-            if (customer == null)
+            var customerResult = _customerMgr.GetValidCustomer(log.CustomerId.Value);
+            if (customerResult.IsFailure)
             {
-                return Result.Error(1, "Müşteri bulunamadı");
+                return customerResult.ToResult(100);
             }
-            if (log.Type == 1) //Alınan
+            
+            var customer = customerResult.Data;
+            switch (log.Type)
             {
-                customer.Debt -= log.Money;
+                //Alınan
+                case 1:
+                    customer.Debt -= log.Money;
+                    break;
+                //Verilen
+                case 2:
+                    customer.Debt += log.Money;
+                    break;
             }
-            if (log.Type == 2) //Verilen
-            {
-                customer.Debt += log.Money;
-            }
-            var customerResult = CustomerDAL.This.Update(customer);
-            if (!customerResult)
-            {
-                return Result.Error(1, "DbError");
-            }
+            _unitOfWork.Customers.Update(customer);
             log.UserId = id;
-            var res = DebtLogDAL.This.Add(log);
+            _unitOfWork.DebtLogs.Add(log);
+            var res = _unitOfWork.Save();
             if (!res)
             {
                 return Result.Error(1, "DbError");
@@ -54,9 +57,9 @@ namespace Application.Manager
         }
         public List<DebtLog> GetValidList()
         {
-            var list = DebtLogDAL.This.GetList();
-            var customers = CustomerMgr.This.GetValidCustomers().Select(x => x.CustomerNo).ToList();
-            var suppliers = SupplierMgr.This.GetValidSuppliers().Select(x => x.SupplierNo).ToList();
+            var list = _unitOfWork.DebtLogs.GetList();
+            var customers = _customerMgr.GetValidCustomers().Select(x => x.Id).ToList();
+            var suppliers = _supplierMgr.GetValidSuppliers().Select(x => x.Id).ToList();
             foreach(var item in list)
             {
                 if(item.CustomerId != null)

@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.SupplierNo)
+                @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RegisterDate)
@@ -42,7 +42,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.SupplierNo)
+                    @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.RegisterDate)
@@ -64,9 +64,9 @@
                 </td>
                 
                 <td>
-                    @Html.ActionLink("Düzenle", "Edit", new { id=item.SupplierNo  }) |
-                    @Html.ActionLink("Detay", "Details", new { id=item.SupplierNo  }) |
-                    @Html.ActionLink("Sil", "Delete", new { id=item.SupplierNo  })
+                    @Html.ActionLink("Düzenle", "Edit", new { id=item.Id  }) |
+                    @Html.ActionLink("Detay", "Details", new { id=item.Id  }) |
+                    @Html.ActionLink("Sil", "Delete", new { id=item.Id  })
                 </td>
             </tr>
         }

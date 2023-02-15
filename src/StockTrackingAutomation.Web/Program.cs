@@ -1,4 +1,8 @@
+using Application.Manager;
+using Domain.Abstract;
+using Domain.Entities;
 using EasMe;
+using EasMe.Logging;
 using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +26,16 @@ builder.Services.AddDistributedMemoryCache();
 //{
 //    x.Filters.Add(new ExceptionHandleFilter());
 //});
+//ADD Business services dependency
+builder.Services.AddScoped<IBuyLogMgr, BuyLogMgr>();
+builder.Services.AddScoped<ICustomerMgr, CustomerMgr>();
+builder.Services.AddScoped<IDebtLogMgr, DebtLogMgr>();
+builder.Services.AddScoped<IProductMgr, ProductMgr>();
+builder.Services.AddScoped<ISaleLogMgr, SaleLogMgr>();
+builder.Services.AddScoped<ISupplierMgr, SupplierMgr>();
+builder.Services.AddScoped<IUserMgr, UserMgr>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddDbContext<BusinessDbContext>();
 
 var app = builder.Build();
 

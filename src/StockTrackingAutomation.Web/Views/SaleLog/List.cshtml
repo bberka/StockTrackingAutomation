@@ -1,5 +1,4 @@
-﻿@using Application.Caching;
-@model IEnumerable<Domain.Entities.SaleLog>
+﻿@model IEnumerable<Domain.Entities.SaleLog>
 
 @{
     ViewData["Title"] = "List";
@@ -54,17 +53,13 @@
                     @Html.DisplayFor(modelItem => item.RegisterDate)
                 </td>
                 <td>
-                    @{
-                        var productName = DbCache.GetProductName(item.ProductId);
-                    }
-                    @Html.ActionLink(productName,"Edit","Product", new { id = item.ProductId })
+                    
+                    @Html.ActionLink(item.Product.Name,"Edit","Product", new { id = item.ProductId })
                 </td>
 
                 <td>
-                    @{
-                        var customerFirmName = DbCache.GetCustomerName(item.CustomerId);
-                    }
-                    @Html.ActionLink(customerFirmName,"Details","Customer", new { id = item.CustomerId })
+                    
+                    @Html.ActionLink(item.Customer.CompanyName,"Details","Customer", new { id = item.CustomerId })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PricePerUnit)
@@ -79,10 +74,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @{
-                        var userName = DbCache.GetUserEmail(item.UserId);
-                    }
-                    @Html.DisplayFor(modelItem => userName)
+                    @Html.DisplayFor(modelItem => item.User.EmailAddress)
                 </td>
                
             </tr>

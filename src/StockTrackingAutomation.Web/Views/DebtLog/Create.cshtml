@@ -31,7 +31,7 @@
               <option selected disabled value="0">Seçiniz</option>
                 @foreach(var p in Model.Customers)
                 {
-                    <option value="@p.CustomerNo">@p.Name : @p.CompanyName</option>
+                    <option value="@p.Id">@p.Name : @p.CompanyName</option>
                 }
             </select>
             <br />

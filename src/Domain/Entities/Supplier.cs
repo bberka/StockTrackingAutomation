@@ -1,21 +1,11 @@
-﻿using EasMe.EFCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
-    public class Supplier : IEfEntity
+    public class Supplier : IEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Tedarikçi No")]
-        public int SupplierNo { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Kayıt Tarihi")]
         public DateTime RegisterDate { get; set; } = DateTime.Now;

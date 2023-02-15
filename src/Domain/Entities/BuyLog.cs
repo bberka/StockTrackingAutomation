@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using EasMe.EFCore;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
-    public class BuyLog : IEfEntity
+    public class BuyLog : IEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,6 +13,7 @@ namespace Domain.Entities
         [Display(Name = "Ürün")]
         [ForeignKey("Product")]
         public int ProductId { get; set; }
+
 
         [Display(Name = "Ürün Sayısı")]
         public long Count { get; set; }
@@ -41,5 +32,10 @@ namespace Domain.Entities
         [ForeignKey("User")]
         [Display(Name = "Kaydı Giren Kullanıcı")]
         public int UserId { get; set; }
+
+        public virtual Product Product { get; set; }
+        public virtual Supplier Supplier { get; set; }
+        public virtual User  User { get; set; }
+
     }
 }

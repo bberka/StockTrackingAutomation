@@ -19,7 +19,7 @@
                 <option selected disabled value="0">Seçiniz</option>
                 @foreach (var p in Model.Products)
                 {
-                    <option value="@p.ProductNo">@p.Name</option>
+                    <option value="@p.Id">@p.Name</option>
                 }
             </select>
             <br />
@@ -34,7 +34,7 @@
                 <option selected disabled value="0">Seçiniz</option>
                 @foreach (var p in Model.Suppliers)
                 {
-                    <option value="@p.SupplierNo">@p.Name</option>
+                    <option value="@p.Id">@p.Name</option>
                 }
             </select>
             <br />

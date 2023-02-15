@@ -1,31 +1,32 @@
-﻿using Domain.Entities;
+﻿using Domain.Abstract;
+using Domain.Entities;
 using Domain.Models;
-using Domain.ValueObjects;
 using EasMe;
-using Infrastructure.DAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EasMe.Models;
 
 namespace Application.Manager
 {
-    public class UserMgr
+    public interface IUserMgr
     {
-        private UserMgr() { }
-        public static UserMgr This
+        ResultData<User> Login(LoginModel model);
+        Result Register(User user);
+        Result UpdateUser(User user);
+        List<User> GetValidUsers();
+        Result DeleteUser(int id);
+        User? GetUser(int id);
+    }
+
+    public class UserMgr : IUserMgr
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UserMgr(IUnitOfWork unitOfWork)
         {
-            get
-            {
-                Instance ??= new();
-                return Instance;
-            }
+            _unitOfWork = unitOfWork;
         }
-        private static UserMgr? Instance;
         public ResultData<User> Login(LoginModel model)
         {
-            var user = UserDAL.This.GetFirstOrDefault(x => x.EmailAddress == model.EmailAddress && x.IsValid == true && !x.DeletedDate.HasValue);
+            var user = _unitOfWork.Users.GetFirstOrDefault(x => x.EmailAddress == model.EmailAddress && x.IsValid == true && !x.DeletedDate.HasValue);
             if (user is null)
             {
                 return ResultData<User>.Error(1, "Hesap bulunamadı");
@@ -43,19 +44,20 @@ namespace Application.Manager
         }
         public Result Register(User user)
         {
-            var existEmail = UserDAL.This.Any(x => x.EmailAddress == user.EmailAddress);
+            var existEmail = _unitOfWork.Users.Any(x => x.EmailAddress == user.EmailAddress);
             if (existEmail)
             {
                 return Result.Error(1, "Bu mail zaten var");
             }
             user.Password = Convert.ToBase64String(user.Password.MD5Hash());
-            var res = UserDAL.This.Add(user);
+            _unitOfWork.Users.Add(user);
+            var res = _unitOfWork.Save();
             if (!res) return Result.Error(2, "DbError");
             return Result.Success();
         }
         public Result UpdateUser(User user)
         {
-            var current = UserDAL.This.Find(user.UserNo);
+            var current = _unitOfWork.Users.Find(user.UserNo);
             if (current is null)
             {
                 return Result.Error(1, "Kullanıcı bulunamadı");
@@ -64,7 +66,8 @@ namespace Application.Manager
             current.EmailAddress = user.EmailAddress;
             current.Password = Convert.ToBase64String(user.Password.MD5Hash());
             current.RoleType = user.RoleType;
-            var res = UserDAL.This.Update(user);
+            _unitOfWork.Users.Update(user);
+            var res = _unitOfWork.Save();
             if (!res)
             {
                 return Result.Error(2, "DbError");
@@ -73,12 +76,12 @@ namespace Application.Manager
         }
         public List<User> GetValidUsers()
         {
-            return UserDAL.This.GetList(x => x.IsValid == true && !x.DeletedDate.HasValue);
+            return _unitOfWork.Users.GetList(x => x.IsValid == true && !x.DeletedDate.HasValue);
         }
         
         public Result DeleteUser(int id)
         {
-            var user = UserDAL.This.Find(id);
+            var user = _unitOfWork.Users.Find(id);
             if (user == null)
             {
                 return Result.Error(1, "Kullanıcı bulunamadı");
@@ -89,7 +92,8 @@ namespace Application.Manager
             }
             user.DeletedDate = DateTime.Now;
             user.IsValid = false;
-            var res = UserDAL.This.Update(user);
+            _unitOfWork.Users.Update(user);
+            var res = _unitOfWork.Save();
             if (!res)
             {
                 return Result.Error(3, "DbError");
@@ -97,9 +101,9 @@ namespace Application.Manager
             return Result.Success();
         }
 
-        public User GetUser(int id)
+        public User? GetUser(int id)
         {
-            return UserDAL.This.Find(id);
+            return _unitOfWork.Users.Find(id);
         }
     }
 }

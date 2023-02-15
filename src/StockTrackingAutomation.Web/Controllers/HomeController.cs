@@ -1,12 +1,9 @@
 ﻿using Application.Manager;
 using Domain.Helpers;
 using Domain.Models;
-using EasMe;
 using EasMe.Extensions;
-using Infrastructure.DAL;
-using Microsoft.AspNetCore.Identity;
+using EasMe.Logging;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
 using StockTrackingAutomation.Web.Filters;
 using StockTrackingAutomation.Web.Models;
 using System.Diagnostics;
@@ -14,11 +11,14 @@ using System.Diagnostics;
 namespace StockTrackingAutomation.Web.Controllers
 {
 	public class HomeController : Controller
-	{
-		private readonly EasLog logger = EasLogFactory.CreateLogger(nameof(HomeController));
-		public HomeController()
-		{
-		}
+    {
+        private readonly IUserMgr _userMgr;
+        private static readonly IEasLog logger = EasLogFactory.CreateLogger();
+
+        public HomeController(IUserMgr userMgr)
+        {
+            _userMgr = userMgr;
+        }
 
 		[HttpGet]
 		public IActionResult Index()
@@ -36,10 +36,10 @@ namespace StockTrackingAutomation.Web.Controllers
 			{
 				return RedirectToAction("Statistics");
             }
-            var res = UserMgr.This.Login(model);
+            var res = _userMgr.Login(model);
 			if (!res.IsSuccess)
 			{
-				ModelState.AddModelError("", res.Message);
+				ModelState.AddModelError("", res.ErrorCode);
                 logger.Warn("Login failed", res.ToJsonString());
                 return View(model);
 			}

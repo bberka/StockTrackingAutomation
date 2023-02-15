@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerNo)
+                @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RegisterDate)
@@ -42,7 +42,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomerNo)
+                    @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.RegisterDate)
@@ -63,9 +63,9 @@
                     @Html.DisplayFor(modelItem => item.Debt)
                 </td>
                 <td>
-                    @Html.ActionLink("Düzenle", "Edit", new { id= item.CustomerNo  }) |
-                    @Html.ActionLink("Detay", "Details", new { id= item.CustomerNo }) |
-                    @Html.ActionLink("Sil", "Delete", new { id= item.CustomerNo })
+                    @Html.ActionLink("Düzenle", "Edit", new { id= item.Id  }) |
+                    @Html.ActionLink("Detay", "Details", new { id= item.Id }) |
+                    @Html.ActionLink("Sil", "Delete", new { id= item.Id })
                 </td>
             </tr>
         }

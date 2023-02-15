@@ -4,6 +4,7 @@ using Domain.Helpers;
 using Domain.Models;
 using EasMe;
 using EasMe.Extensions;
+using EasMe.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StockTrackingAutomation.Web.Filters;
@@ -13,11 +14,24 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter(RoleType.Owner)]
     public class BuyLogController : Controller
     {
-        private static EasLog logger = EasLogFactory.CreateLogger(nameof(BuyLogController));
+        private readonly IBuyLogMgr _buyLogMgr;
+        private readonly ISupplierMgr _supplierMgr;
+        private readonly IProductMgr _productMgr;
+        private static readonly IEasLog logger = EasLogFactory.CreateLogger();
+
+        public BuyLogController(
+            IBuyLogMgr buyLogMgr,
+            ISupplierMgr supplierMgr,
+            IProductMgr productMgr)
+        {
+            _buyLogMgr = buyLogMgr;
+            _supplierMgr = supplierMgr;
+            _productMgr = productMgr;
+        }
         [HttpGet]
         public IActionResult List()
         {
-            var list = BuyLogMgr.This.GetValidList();
+            var list = _buyLogMgr.GetValidList();
             logger.Info("BuyLogList: " + list.Count);
             return View(list);
         }
@@ -27,22 +41,22 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var res = new BuyLogCreateViewModel
             {
-                Products = ProductMgr.This.GetValidProducts(),
-                Suppliers = SupplierMgr.This.GetValidSuppliers()
+                Products = _productMgr.GetValidProducts(),
+                Suppliers = _supplierMgr.GetValidSuppliers()
             };
             return View(res);
         }
         [HttpPost]
         public IActionResult Create(BuyLogCreateViewModel viewModel)
         {
-            viewModel.Products = ProductMgr.This.GetValidProducts();
-            viewModel.Suppliers = SupplierMgr.This.GetValidSuppliers();
+            viewModel.Products = _productMgr.GetValidProducts();
+            viewModel.Suppliers = _supplierMgr.GetValidSuppliers();
             var userNo = HttpContext.GetUser().UserNo;
             viewModel.Data.UserId = userNo;
-            var res = BuyLogMgr.This.AddBuyLog(viewModel.Data);
+            var res = _buyLogMgr.AddBuyLog(viewModel.Data);
             if (!res.IsSuccess)
             {
-                ModelState.AddModelError("", res.Message);
+                ModelState.AddModelError("", res.ErrorCode);
                 logger.Warn("BuyLogCreate:" + viewModel.Data.ToJsonString(), res.ToJsonString());
                 return View(viewModel);
             }
