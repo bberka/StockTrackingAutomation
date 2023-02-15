@@ -14,15 +14,17 @@ namespace StockTrackingAutomation.Web.Controllers
     {
         private readonly IDebtService _debtService;
         private readonly ICustomerService _customerService;
+        private readonly ISupplierService _supplierService;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
         public DebtLogController(
             IDebtService debtService,
-            ICustomerService customerService
-            )
+            ICustomerService customerService,
+            ISupplierService supplierService)
         {
             _debtService = debtService;
             _customerService = customerService;
+            _supplierService = supplierService;
         }
         [HttpGet]
         public IActionResult List()
@@ -32,7 +34,7 @@ namespace StockTrackingAutomation.Web.Controllers
             return View(list);
         }
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult CustomerDebtLogCreate()
         {
             var res = new DebtLogCreateViewModel
             {
@@ -41,18 +43,42 @@ namespace StockTrackingAutomation.Web.Controllers
             return View(res);
         }
         [HttpPost]
-        public IActionResult Create(DebtLogCreateViewModel viewModel)
+        public IActionResult CustomerDebtLogCreate(DebtLogCreateViewModel viewModel)
         {
             viewModel.Customers = _customerService.GetValidCustomers();
             var userNo = HttpContext.GetUser().Id;
-            var res = _debtService.AddNewRecord(viewModel.Data, userNo);
+            var res = _debtService.AddCustomerDebtLogRecord(viewModel.Data, userNo);
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
-                logger.Warn("DebtLogCreate:" + viewModel.Data.ToJsonString(), res.ToJsonString());
+                logger.Warn("CustomerDebtLogCreate", res.Rv + res.ErrorCode);
                 return View(viewModel);
             }
-            logger.Info("DebtLogCreate:" + viewModel.Data.ToJsonString());
+            logger.Info("CustomerDebtLogCreate");
+            return RedirectToAction("List");
+        }
+        [HttpGet]
+        public IActionResult SupplierDebtLogCreate()
+        {
+            var res = new DebtLogCreateViewModel
+            {
+                Suppliers = _supplierService.GetValidSuppliers()
+            };
+            return View(res);
+        }
+        [HttpPost]
+        public IActionResult SupplierDebtLogCreate(DebtLogCreateViewModel viewModel)
+        {
+            viewModel.Suppliers = _supplierService.GetValidSuppliers();
+            var userNo = HttpContext.GetUser().Id;
+            var res = _debtService.AddSupplierDebtLogRecord(viewModel.Data, userNo);
+            if (!res.IsSuccess)
+            {
+                ModelState.AddModelError("", res.ErrorCode);
+                logger.Warn("SupplierDebtLogCreate", res.Rv + res.ErrorCode);
+                return View(viewModel);
+            }
+            logger.Info("SupplierDebtLogCreate");
             return RedirectToAction("List");
         }
     }

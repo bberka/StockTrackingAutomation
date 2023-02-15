@@ -1,6 +1,7 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using EasMe.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Manager
 {
@@ -27,7 +28,12 @@ namespace Application.Manager
         }
 		public List<Sale> GetValidList()
 		{
-            var list = _unitOfWork.Sales.GetList();
+            var list = _unitOfWork.Sales
+                .Get()
+                .Include(x => x.Product)
+                .Include(x => x.User)
+                .Include(x => x.Customer)
+                .ToList();
             var products = _productService.GetValidProducts().Select(x => x.Id);
             list.RemoveAll(x => !products.Contains(x.ProductId));
 			return list;

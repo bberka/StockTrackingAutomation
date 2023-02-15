@@ -40,18 +40,18 @@ namespace StockTrackingAutomation.Web.Controllers
 			if (!res.IsSuccess)
 			{
 				ModelState.AddModelError("", res.ErrorCode);
-                logger.Warn("Login failed", res.ToJsonString());
+                logger.Warn("Login failed: " + model.EmailAddress, res.Rv + res.ErrorCode);
                 return View(model);
 			}
 			HttpContext.SetUser(res.Data);
-			logger.Info("Login success", res.ToJsonString());
+			logger.Info("Login success: " + model.EmailAddress , res.Rv + res.ErrorCode);
 			return RedirectToAction("Statistics");
 		}
 		[HttpGet]
         public IActionResult Logout()
         {
 			var user = HttpContext.GetUser();
-            logger.Info("Logging out" , user.ToJsonString());
+            logger.Info("Logging out: " + user.Id);
             HttpContext.RemoveAuth();
             return RedirectToAction("Index");
         }

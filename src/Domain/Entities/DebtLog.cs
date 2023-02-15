@@ -30,11 +30,11 @@ namespace Domain.Entities
             }
         }
         [ForeignKey("Customer")]
-        [Display(Name = "Müşteri No")]
+        [Display(Name = "Müşteri")]
         public int? CustomerId { get; set; }
 
         [ForeignKey("Supplier")]
-        [Display(Name = "Tedarikçi No")]
+        [Display(Name = "Tedarikçi")]
         public int? SupplierId { get; set; }
 
         [Display(Name = "Para Miktarı")]
@@ -48,8 +48,8 @@ namespace Domain.Entities
         [Display(Name = "Kaydı Giren Kullanıcı")]
         public int UserId { get; set; }
 
-        public virtual Customer Customer { get; set; }
-        public virtual Supplier Supplier { get; set; }
+        public virtual Customer? Customer { get; set; }
+        public virtual Supplier? Supplier { get; set; }
         public virtual User User { get; set; }
     }
 }

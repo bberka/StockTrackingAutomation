@@ -30,14 +30,14 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var user = _customerService.GetValidCustomer(id);
             logger.Info("Customer details:" + id);
-            return View(user);
+            return View(user.Data);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
             var user = _customerService.GetValidCustomer(id);
             logger.Info("Customer edit:" + id);
-            return View(user);
+            return View(user.Data);
         }
         [HttpPost]
         public IActionResult Edit(Customer customer)
@@ -47,10 +47,10 @@ namespace StockTrackingAutomation.Web.Controllers
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
-                logger.Warn("Customer edit:" + customer.ToJsonString(),res.ToJsonString());
+                logger.Warn("Customer edit:" + customer.Id, res.Rv + res.ErrorCode);
                 return View(customer);
             }
-            logger.Info("Customer edit:" + customer.ToJsonString());
+            logger.Info("Customer edit:" + customer.Id);
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -64,11 +64,11 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = _customerService.AddCustomer(customer);
             if (!res.IsSuccess)
             {
-                logger.Warn("customer add:" + customer.ToJsonString(), res.ToJsonString());
+                logger.Warn("customer add:" + customer.Id, res.Rv + res.ErrorCode);
                 ModelState.AddModelError("", res.ErrorCode);
                 return View(customer);
             }
-            logger.Info("customer add:" + customer.ToJsonString());
+            logger.Info("customer add:" + customer.Id);
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -77,7 +77,7 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = _customerService.DeleteCustomer(id);
             if (!res.IsSuccess)
             {
-                logger.Warn("Customer delete:" + id, res.ToJsonString());
+                logger.Warn("Customer delete:" + id, res.Rv + res.ErrorCode);
                 ModelState.AddModelError("", res.ErrorCode);
                 return RedirectToAction("List");
             }

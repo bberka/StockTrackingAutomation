@@ -36,11 +36,11 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = _supplierMgr.AddSupplier(data);
             if (!res.IsSuccess)
             {
-                logger.Warn("Supplier add:" + data.ToJsonString(), res.ToJsonString());
+                logger.Warn("Supplier add:" + data.EmailAddress, res.Rv + res.ErrorCode);
                 ModelState.AddModelError("", res.ErrorCode);
                 return View(data);
             }
-            logger.Info("Supplier add:" + data.ToJsonString());
+            logger.Info("Supplier add:" + data.EmailAddress, res.Rv + res.ErrorCode);
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -49,7 +49,7 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = _supplierMgr.RemoveSupplier(id);
             if (!res.IsSuccess)
             {
-                logger.Warn("Supplier delete:" + id, res.ToJsonString());
+                logger.Warn("Supplier delete:" + id, res.Rv + res.ErrorCode);
                 return RedirectToAction("List");
             }
             logger.Info("Supplier delete:" + id);
@@ -64,14 +64,14 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var data = _supplierMgr.GetValidSupplier(id);
             logger.Info("Supplier details:" + id);
-            return View(data);
+            return View(data.Data);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
             var data = _supplierMgr.GetValidSupplier(id);
             logger.Info("Data edit:" + id);
-            return View(data);
+            return View(data.Data);
         }
         [HttpPost]
         public IActionResult Edit(Supplier data)
@@ -80,10 +80,10 @@ namespace StockTrackingAutomation.Web.Controllers
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
-                logger.Warn("Supplier edit:" + data.ToJsonString(), res.ToJsonString());
+                logger.Warn("Supplier edit:" + data.Id, res.Rv + res.ErrorCode);
                 return View(data);
             }
-            logger.Info("Supplier edit:" + data.ToJsonString());
+            logger.Info("Supplier edit:" + data.Id);
             return RedirectToAction("List");
         }
     }

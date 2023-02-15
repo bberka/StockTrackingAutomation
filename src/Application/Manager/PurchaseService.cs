@@ -47,11 +47,12 @@ namespace Application.Manager
             {
                 return Result.Error(1, "Ürün bulunamadı");
             }
-            var supplier = _supplierMgr.GetValidSupplier(data.SupplierId);
-            if(supplier is null)
+            var supplierResult = _supplierMgr.GetValidSupplier(data.SupplierId);
+            if(supplierResult.IsFailure)
             {
-                return Result.Error(2, "Tedarikçi bulunamadı");
+                return supplierResult.ToResult(100);
             }
+            var supplier = supplierResult.Data;
             product.Stock += data.Count;
             _unitOfWork.Products.Update(product);
             var totalPrice = data.PricePerUnit * data.Count;

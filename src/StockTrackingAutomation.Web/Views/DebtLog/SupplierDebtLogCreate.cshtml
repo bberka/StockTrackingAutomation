@@ -1,0 +1,54 @@
+﻿@using Domain.Models;
+@model DebtLogCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Tedarikçiye Verilen Para Kaydı</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SupplierDebtLogCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Data.Type" value="2" class="form-control d-none" />
+            <br />
+            <div class="form-group">
+                <label asp-for="Data.Money" class="control-label"></label>
+                <input asp-for="Data.Money" class="form-control" />
+                <span asp-validation-for="Data.Money" class="text-danger"></span>
+            </div>
+            <br />
+            <label asp-for="Data.SupplierId" class="control-label"></label>
+            <select asp-for="Data.SupplierId" class="form-select" aria-label="Seçiniz">
+              <option selected disabled value="0">Seçiniz</option>
+                @foreach(var p in Model.Suppliers)
+                {
+                    <option value="@p.Id">@p.Name : @p.CompanyName</option>
+                }
+            </select>
+            <br />
+            <div class="form-group">
+                <label asp-for="Data.Description" class="control-label"></label>
+                <input asp-for="Data.Description" class="form-control" />
+                <span asp-validation-for="Data.Description" class="text-danger"></span>
+            </div>            
+            <br />
+
+            <div class="form-group">
+                <input type="submit" value="Ekle" class="btn btn-primary w-100" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+
+<div>
+    <a asp-action="List">Listeye Dön</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

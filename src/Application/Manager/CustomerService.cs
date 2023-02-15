@@ -1,6 +1,7 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using EasMe.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Manager
 {
@@ -23,12 +24,18 @@ namespace Application.Manager
         }
         public List<Customer> GetValidCustomers()
         {
-            return _unitOfWork.Customers.GetList(x => !x.DeletedDate.HasValue);
+            return _unitOfWork.Customers
+                .Get(x => !x.DeletedDate.HasValue)
+                .Include(x => x.DebtLogs)
+                .ToList();
         }
         public ResultData<Customer> GetValidCustomer(int id)
         {
-            var customer = _unitOfWork.Customers.Find(id);
-            if (customer == null) return Result.Error(1, "Müşteri bulunamadı");
+            var customer = _unitOfWork.Customers
+                .Get(x => x.Id == id)
+                .Include(x => x.DebtLogs)
+                .FirstOrDefault();
+            if (customer is null) return Result.Error(1, "Müşteri bulunamadı");
             if (customer.DeletedDate.HasValue) return Result.Error(2, "Müşteri silinmiş");
             return customer;
         }

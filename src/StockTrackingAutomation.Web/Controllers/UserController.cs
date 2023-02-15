@@ -48,10 +48,10 @@ namespace StockTrackingAutomation.Web.Controllers
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
-                logger.Warn("User edit:" + user.ToJsonString(),res.ToJsonString());
+                logger.Warn("User edit:" + user.Id, res.Rv + res.ErrorCode);
                 return View(user);
             }
-            logger.Info("User edit:" + user.ToJsonString());
+            logger.Info("User edit:" + user.Id);
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -65,11 +65,11 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = _userMgr.Register(user);
             if (!res.IsSuccess)
             {
-                logger.Warn("User add:" + user.ToJsonString(), res.ToJsonString());
+                logger.Warn("User add:" + user.EmailAddress, res.Rv + res.ErrorCode);
                 ModelState.AddModelError("", res.ErrorCode);
                 return View(user);
             }
-            logger.Info("User add:" + user.ToJsonString());
+            logger.Info("User add:" + user.EmailAddress);
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -78,7 +78,7 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = _userMgr.DeleteUser(id);
             if (!res.IsSuccess)
             {
-                logger.Warn("User delete:" + id, res.ToJsonString());
+                logger.Warn("User delete:" + id, res.Rv + res.ErrorCode);
                 ModelState.AddModelError("", res.ErrorCode);
                 return RedirectToAction("List");
             }

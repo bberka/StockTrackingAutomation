@@ -1,12 +1,14 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using EasMe.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Manager
 {
     public interface IDebtService
     {
-        Result AddNewRecord(DebtLog log, int id);
+        Result AddCustomerDebtLogRecord(DebtLog log, int authorUserId);
+        Result AddSupplierDebtLogRecord(DebtLog log, int authorUserId);
         List<DebtLog> GetValidList();
     }
 
@@ -25,14 +27,15 @@ namespace Application.Manager
             _customerService = customerService;
             _supplierService = supplierService;
         }
-        public Result AddNewRecord(DebtLog log, int id)
+   
+        public Result AddCustomerDebtLogRecord(DebtLog log, int authorUserId)
         {
             var customerResult = _customerService.GetValidCustomer(log.CustomerId.Value);
             if (customerResult.IsFailure)
             {
                 return customerResult.ToResult(100);
             }
-            
+
             var customer = customerResult.Data;
             switch (log.Type)
             {
@@ -40,13 +43,15 @@ namespace Application.Manager
                 case 1:
                     customer.Debt -= log.Money;
                     break;
-                //Verilen
-                case 2:
-                    customer.Debt += log.Money;
-                    break;
+                ////Verilen
+                //case 2:
+                //    customer.Debt += log.Money;
+                //    break;
+                default:
+                    throw new InvalidOperationException();
             }
             _unitOfWork.Customers.Update(customer);
-            log.UserId = id;
+            log.UserId = authorUserId;
             _unitOfWork.DebtLogs.Add(log);
             var res = _unitOfWork.Save();
             if (!res)
@@ -54,10 +59,51 @@ namespace Application.Manager
                 return Result.Error(1, "DbError");
             }
             return Result.Success();
+            throw new NotImplementedException();
         }
+
+        public Result AddSupplierDebtLogRecord(DebtLog log, int authorUserId)
+        {
+            var supplierResult = _supplierService.GetValidSupplier(log.SupplierId.Value);
+            if (supplierResult.IsFailure)
+            {
+                return supplierResult.ToResult(100);
+            }
+
+            var supplier = supplierResult.Data;
+            switch (log.Type)
+            {
+                //Alınan
+                //case 1:
+                //    supplier.Debt -= log.Money;
+                //    break;
+                //Verilen
+                case 2:
+                    supplier.Debt += log.Money;
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+            _unitOfWork.Suppliers.Update(supplier);
+            log.UserId = authorUserId;
+            _unitOfWork.DebtLogs.Add(log);
+            var res = _unitOfWork.Save();
+            if (!res)
+            {
+                return Result.Error(1, "DbError");
+            }
+            return Result.Success();
+            throw new NotImplementedException();
+        }
+
         public List<DebtLog> GetValidList()
         {
-            var list = _unitOfWork.DebtLogs.GetList();
+            var list = _unitOfWork.DebtLogs
+                .Get()
+                .Include(x => x.Supplier)
+                .Include(x => x.Customer)
+                .Include(x => x.User)
+                .ToList();
             var customers = _customerService.GetValidCustomers().Select(x => x.Id).ToList();
             var suppliers = _supplierService.GetValidSuppliers().Select(x => x.Id).ToList();
             foreach(var item in list)

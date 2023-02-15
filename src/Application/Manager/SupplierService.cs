@@ -1,12 +1,13 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using EasMe.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Manager
 {
 	public interface ISupplierService
     {
-        Supplier? GetValidSupplier(int id);
+        ResultData<Supplier> GetValidSupplier(int id);
         List<Supplier> GetValidSuppliers();
         Result AddSupplier(Supplier supplier);
         Result RemoveSupplier(int id);
@@ -21,10 +22,16 @@ namespace Application.Manager
         {
             _unitOfWork = unitOfWork;
         }
-		public Supplier? GetValidSupplier(int id)
+		public ResultData<Supplier> GetValidSupplier(int id)
 		{
-			return _unitOfWork.Suppliers.Find(id);
-		}
+			var supplier = _unitOfWork.Suppliers.Get(x => x.Id == id )
+                .Include(x => x.DebtLogs)
+                .Include(x => x.BuyLogs)
+                .FirstOrDefault();
+            if (supplier is null) return Result.Warn(1, "Tedarikçi bulunamadı");
+			if(supplier.DeletedDate.HasValue) return Result.Warn(2, "Tedarikçi silinmiş");
+            return supplier;
+        }
 		public List<Supplier> GetValidSuppliers()
 		{
 			return _unitOfWork.Suppliers.GetList(x => !x.DeletedDate.HasValue);

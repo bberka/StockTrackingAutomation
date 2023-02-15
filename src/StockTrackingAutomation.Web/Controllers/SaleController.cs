@@ -55,10 +55,10 @@ namespace StockTrackingAutomation.Web.Controllers
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
-                logger.Warn("SaleLogCreate:" + viewModel.Data.ToJsonString(), res.ToJsonString());
+                logger.Warn("SaleLogCreate", res.Rv + res.ErrorCode);
                 return View(viewModel);
             }
-            logger.Info("SaleLogCreate:" + viewModel.Data.ToJsonString());
+            logger.Info("SaleLogCreate");
             return RedirectToAction("List");
         }
     }

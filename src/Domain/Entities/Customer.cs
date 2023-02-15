@@ -34,6 +34,6 @@
         [Display(Name = "Silinme Tarihi")]
         public DateTime? DeletedDate { get; set; }
 
-        public virtual List<DebtLog> DebtLogs { get; set; }
+        public virtual List<DebtLog> DebtLogs { get; set; } = new();
     }
 }

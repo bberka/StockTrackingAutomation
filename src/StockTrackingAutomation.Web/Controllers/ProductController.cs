@@ -28,7 +28,7 @@ namespace StockTrackingAutomation.Web.Controllers
         public IActionResult Edit(int id)
         {
             var product = _productMgr.GetProduct(id);
-            logger.Info("Product edit: " + product.ToJsonString());
+            logger.Info("Product edit: " + id);
             return View(product);
         }
         [HttpPost]
@@ -38,10 +38,10 @@ namespace StockTrackingAutomation.Web.Controllers
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
-                logger.Warn("Product edit:" + product.ToJsonString(), res.ToJsonString());
+                logger.Warn("Product edit:" + product.Id, res.Rv + res.ErrorCode);
                 return View(product);
             }
-            logger.Info("Product edit:" + product.ToJsonString());
+            logger.Info("Product edit:" + product.Id);
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -56,10 +56,10 @@ namespace StockTrackingAutomation.Web.Controllers
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
-                logger.Warn("Product add: " + product.ToJsonString(), res.ToJsonString());
+                logger.Warn("Product add: " + product.Name, res.Rv + res.ErrorCode);
                 return View(product);
             }
-            logger.Info("Product add: " + product.ToJsonString(), res.ToJsonString());
+            logger.Info("Product add: " + product.Name, res.Rv + res.ErrorCode);
             return RedirectToAction("List");
         }
         [HttpGet]
@@ -68,10 +68,10 @@ namespace StockTrackingAutomation.Web.Controllers
             var res = _productMgr.DeleteProduct(id);
             if (!res.IsSuccess)
             {
-                logger.Warn("Product delete: " + id, res.ToJsonString());
+                logger.Warn("Product delete: " + id, res.Rv + res.ErrorCode);
                 return RedirectToAction("List");
             }
-            logger.Info("Product delete: " + id, res.ToJsonString());
+            logger.Info("Product delete: " + id, res.Rv + res.ErrorCode);
             return RedirectToAction("List");
         }
     }
