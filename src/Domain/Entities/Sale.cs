@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿
+
+namespace Domain.Entities
 {
     public class Sale : IEntity
 	{

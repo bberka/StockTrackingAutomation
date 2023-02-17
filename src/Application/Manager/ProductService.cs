@@ -23,23 +23,23 @@ namespace Application.Manager
         }
         public List<Product> GetValidProducts()
         {
-            return _unitOfWork.Products.GetList(x => !x.DeletedDate.HasValue);
+            return _unitOfWork.ProductRepository.GetList(x => !x.DeletedDate.HasValue);
         }
 
 		public Product? GetProduct(int id)
 		{
-			return _unitOfWork.Products.Find(id);
+			return _unitOfWork.ProductRepository.Find(id);
 		}
 		public Result UpdateProduct(Product product)
 		{
-            var current = _unitOfWork.Products.Find(product.Id);
+            var current = _unitOfWork.ProductRepository.Find(product.Id);
             if (current is null)
             {
                 return Result.Error(1, "Ürün bulunamadı");
             }
             current.Description = product.Description;
             current.Name = product.Name;
-            _unitOfWork.Products.Update(current);
+            _unitOfWork.ProductRepository.Update(current);
             var res = _unitOfWork.Save();
             if (!res)
             {
@@ -49,9 +49,9 @@ namespace Application.Manager
         }
         public Result AddProduct(Product product)
         {
-            var exist = _unitOfWork.Products.Any(x => x.Name == product.Name && !x.DeletedDate.HasValue);
+            var exist = _unitOfWork.ProductRepository.Any(x => x.Name == product.Name && !x.DeletedDate.HasValue);
             if (exist) return Result.Error(1, "Ürün zaten mevcut");
-            _unitOfWork.Products.Add(product);
+            _unitOfWork.ProductRepository.Add(product);
             var res = _unitOfWork.Save();
             if (!res) return Result.Error(2, "DbError");
             return Result.Success();
@@ -61,7 +61,7 @@ namespace Application.Manager
             var product = GetProduct(id);
             if (product is null) return Result.Error(1, "Ürün bulunamadı");
             product.DeletedDate = DateTime.Now;
-            _unitOfWork.Products.Update(product);
+            _unitOfWork.ProductRepository.Update(product);
             var res = _unitOfWork.Save();
             if (!res) return Result.Error(2, "DbError");
             return Result.Success();

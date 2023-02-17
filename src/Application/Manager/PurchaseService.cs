@@ -28,7 +28,7 @@ namespace Application.Manager
         }
         public List<Purchase> GetValidList()
         {
-            var list = _unitOfWork.Purchases.Get()
+            var list = _unitOfWork.PurchaseRepository.Get()
                 .Include(x => x.Product)
                 .Include(x => x.Supplier)
                 .Include(x => x.User)
@@ -42,7 +42,7 @@ namespace Application.Manager
 
         public Result AddBuyLog(Purchase data)
         {
-            var product = _unitOfWork.Products.Find(data.ProductId);
+            var product = _unitOfWork.ProductRepository.Find(data.ProductId);
             if (product is null)
             {
                 return Result.Error(1, "Ürün bulunamadı");
@@ -54,11 +54,11 @@ namespace Application.Manager
             }
             var supplier = supplierResult.Data;
             product.Stock += data.Count;
-            _unitOfWork.Products.Update(product);
+            _unitOfWork.ProductRepository.Update(product);
             var totalPrice = data.PricePerUnit * data.Count;
             supplier.Debt += totalPrice;
-            _unitOfWork.Suppliers.Update(supplier);
-            _unitOfWork.Purchases.Add(data);
+            _unitOfWork.SupplierRepository.Update(supplier);
+            _unitOfWork.PurchaseRepository.Add(data);
             var res = _unitOfWork.Save();
             if (!res)
             {

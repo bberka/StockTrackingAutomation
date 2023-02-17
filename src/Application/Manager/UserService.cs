@@ -26,7 +26,10 @@ namespace Application.Manager
         }
         public ResultData<User> Login(LoginModel model)
         {
-            var user = _unitOfWork.Users.GetFirstOrDefault(x => x.EmailAddress == model.EmailAddress && x.IsValid == true && !x.DeletedDate.HasValue);
+            var user = _unitOfWork.UserRepository
+                .GetFirstOrDefault(x => x.EmailAddress == model.EmailAddress 
+                                        && x.IsValid == true 
+                                        && !x.DeletedDate.HasValue);
             if (user is null)
             {
                 return ResultData<User>.Error(1, "Hesap bulunamadı");
@@ -44,20 +47,20 @@ namespace Application.Manager
         }
         public Result Register(User user)
         {
-            var existEmail = _unitOfWork.Users.Any(x => x.EmailAddress == user.EmailAddress);
+            var existEmail = _unitOfWork.UserRepository.Any(x => x.EmailAddress == user.EmailAddress);
             if (existEmail)
             {
                 return Result.Error(1, "Bu mail zaten var");
             }
             user.Password = Convert.ToBase64String(user.Password.MD5Hash());
-            _unitOfWork.Users.Add(user);
+            _unitOfWork.UserRepository.Add(user);
             var res = _unitOfWork.Save();
             if (!res) return Result.Error(2, "DbError");
             return Result.Success();
         }
         public Result UpdateUser(User user)
         {
-            var current = _unitOfWork.Users.Find(user.Id);
+            var current = _unitOfWork.UserRepository.Find(user.Id);
             if (current is null)
             {
                 return Result.Error(1, "Kullanıcı bulunamadı");
@@ -66,7 +69,7 @@ namespace Application.Manager
             current.EmailAddress = user.EmailAddress;
             current.Password = Convert.ToBase64String(user.Password.MD5Hash());
             current.RoleType = user.RoleType;
-            _unitOfWork.Users.Update(user);
+            _unitOfWork.UserRepository.Update(user);
             var res = _unitOfWork.Save();
             if (!res)
             {
@@ -76,12 +79,12 @@ namespace Application.Manager
         }
         public List<User> GetValidUsers()
         {
-            return _unitOfWork.Users.GetList(x => x.IsValid == true && !x.DeletedDate.HasValue);
+            return _unitOfWork.UserRepository.GetList(x => x.IsValid == true && !x.DeletedDate.HasValue);
         }
         
         public Result DeleteUser(int id)
         {
-            var user = _unitOfWork.Users.Find(id);
+            var user = _unitOfWork.UserRepository.Find(id);
             if (user == null)
             {
                 return Result.Error(1, "Kullanıcı bulunamadı");
@@ -92,7 +95,7 @@ namespace Application.Manager
             }
             user.DeletedDate = DateTime.Now;
             user.IsValid = false;
-            _unitOfWork.Users.Update(user);
+            _unitOfWork.UserRepository.Update(user);
             var res = _unitOfWork.Save();
             if (!res)
             {
@@ -103,7 +106,7 @@ namespace Application.Manager
 
         public User? GetUser(int id)
         {
-            return _unitOfWork.Users.Find(id);
+            return _unitOfWork.UserRepository.Find(id);
         }
     }
 }

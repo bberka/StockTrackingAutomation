@@ -50,9 +50,9 @@ namespace Application.Manager
                 default:
                     throw new InvalidOperationException();
             }
-            _unitOfWork.Customers.Update(customer);
+            _unitOfWork.CustomerRepository.Update(customer);
             log.UserId = authorUserId;
-            _unitOfWork.DebtLogs.Add(log);
+            _unitOfWork.DebtLogRepository.Add(log);
             var res = _unitOfWork.Save();
             if (!res)
             {
@@ -84,9 +84,9 @@ namespace Application.Manager
                 default:
                     throw new InvalidOperationException();
             }
-            _unitOfWork.Suppliers.Update(supplier);
+            _unitOfWork.SupplierRepository.Update(supplier);
             log.UserId = authorUserId;
-            _unitOfWork.DebtLogs.Add(log);
+            _unitOfWork.DebtLogRepository.Add(log);
             var res = _unitOfWork.Save();
             if (!res)
             {
@@ -98,7 +98,7 @@ namespace Application.Manager
 
         public List<DebtLog> GetValidList()
         {
-            var list = _unitOfWork.DebtLogs
+            var list = _unitOfWork.DebtLogRepository
                 .Get()
                 .Include(x => x.Supplier)
                 .Include(x => x.Customer)

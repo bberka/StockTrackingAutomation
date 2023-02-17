@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using EasMe.EntityFrameworkCore;
+
+namespace Domain.Entities
 {
     public class Purchase : IEntity
     {

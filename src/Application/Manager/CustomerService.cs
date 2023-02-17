@@ -24,14 +24,14 @@ namespace Application.Manager
         }
         public List<Customer> GetValidCustomers()
         {
-            return _unitOfWork.Customers
+            return _unitOfWork.CustomerRepository
                 .Get(x => !x.DeletedDate.HasValue)
                 .Include(x => x.DebtLogs)
                 .ToList();
         }
         public ResultData<Customer> GetValidCustomer(int id)
         {
-            var customer = _unitOfWork.Customers
+            var customer = _unitOfWork.CustomerRepository
                 .Get(x => x.Id == id)
                 .Include(x => x.DebtLogs)
                 .FirstOrDefault();
@@ -53,7 +53,7 @@ namespace Application.Manager
             existingCustomer.CompanyName = customer.CompanyName;
             existingCustomer.EmailAddress = customer.EmailAddress;
             existingCustomer.Name = customer.Name;
-            _unitOfWork.Customers.Update(existingCustomer);
+            _unitOfWork.CustomerRepository.Update(existingCustomer);
             var res = _unitOfWork.Save();
             if (!res)
             {
@@ -64,12 +64,12 @@ namespace Application.Manager
 
         public Result AddCustomer(Customer customer)
         {
-            var exist = _unitOfWork.Customers.Any(x => x.CompanyName == customer.CompanyName);
+            var exist = _unitOfWork.CustomerRepository.Any(x => x.CompanyName == customer.CompanyName);
             if (exist)
             {
                 return Result.Error(1, "Müşteri şirket zaten ekli");
             }
-            _unitOfWork.Customers.Add(customer);
+            _unitOfWork.CustomerRepository.Add(customer);
             var res = _unitOfWork.Save();
             if (!res)
 
@@ -88,7 +88,7 @@ namespace Application.Manager
             }
             var customer = customerResult.Data;
             customer.DeletedDate = DateTime.Now;
-            _unitOfWork.Customers.Update(customer);
+            _unitOfWork.CustomerRepository.Update(customer);
             var res = _unitOfWork.Save();
             if (!res)
             {

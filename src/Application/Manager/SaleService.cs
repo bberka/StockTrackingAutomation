@@ -1,6 +1,7 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using EasMe.Models;
+using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Manager
@@ -28,7 +29,7 @@ namespace Application.Manager
         }
 		public List<Sale> GetValidList()
 		{
-            var list = _unitOfWork.Sales
+            var list = _unitOfWork.SaleRepository
                 .Get()
                 .Include(x => x.Product)
                 .Include(x => x.User)
@@ -38,10 +39,9 @@ namespace Application.Manager
             list.RemoveAll(x => !products.Contains(x.ProductId));
 			return list;
         }
-
 		public Result AddSaleLog(Sale data)
 		{
-            var product = _unitOfWork.Products.Find(data.ProductId);
+            var product = _unitOfWork.ProductRepository.Find(data.ProductId);
             if (product is null)
             {
                 return Result.Error(1, "Ürün bulunamadı");
@@ -59,9 +59,9 @@ namespace Application.Manager
             {
                 return Result.Error(3, "Yeterli stok yok");
             }
-            _unitOfWork.Products.Update(product);
-            _unitOfWork.Customers.Update(customer);
-            _unitOfWork.Sales.Add(data);
+            _unitOfWork.ProductRepository.Update(product);
+            _unitOfWork.CustomerRepository.Update(customer);
+            _unitOfWork.SaleRepository.Add(data);
             var res = _unitOfWork.Save();
             if (!res)
             {
