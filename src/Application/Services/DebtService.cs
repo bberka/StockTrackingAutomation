@@ -74,7 +74,7 @@ namespace Application.Services
                 //    break;
                 //Verilen
                 case 2:
-                    supplier.Debt += log.Money;
+                    supplier.Debt -= log.Money;
                     break;
                 default:
                     throw new InvalidOperationException();
