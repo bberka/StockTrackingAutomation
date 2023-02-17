@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Domain.Entities.DebtLog>
+
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var supplier = Model.FirstOrDefault()?.Supplier ?? new();
+}
+
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 ">
+        <div class="row px-3">
+            <div class="justify-content-between d-flex">
+                <h2 class="m-0 font-weight-bold text-black">Tedarikçiye Verilen Para Kayıtları</h2>
+                <h5>
+                    Tedarikçi Şirket:
+                    @Html.ActionLink(supplier.CompanyName ?? "", "Details", "Supplier", new { id = supplier.Id })
+                </h5>
+            </div>
+           
+        </div>
+
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+
+                <table class="table"  id="my_DataTable">
+                    <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegisterDate)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.TypeString)
+                        </th>
+                        
+                        <th>
+                            @Html.DisplayNameFor(model => model.Money)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserId)
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.Where(x => x.SupplierId.HasValue))
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RegisterDate)
+                            </td>
+                            <td>
+                                @if (item.Type == 1)
+                                {
+                                    <div class="text-success">
+                                        @Html.DisplayFor(modelItem => item.TypeString)
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="text-danger">
+                                        @Html.DisplayFor(modelItem => item.TypeString)
+                                    </div>
+                                }
+                            </td>
+                           
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Money)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.User.EmailAddress)
+                            </td>
+
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

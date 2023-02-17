@@ -26,10 +26,15 @@ namespace StockTrackingAutomation.Web.Controllers
             _productMgr = productMgr;
         }
         [HttpGet]
+        public IActionResult SupplierPurchases(int id)
+        {
+            var list = _purchaseService.GetSupplierPurchases(id);
+            return View(list);
+        }
+        [HttpGet]
         public IActionResult List()
         {
             var list = _purchaseService.GetValidList();
-            logger.Info("BuyLogList: " + list.Count);
             return View(list);
         }
 

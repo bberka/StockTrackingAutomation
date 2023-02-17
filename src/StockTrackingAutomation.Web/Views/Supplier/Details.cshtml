@@ -1,4 +1,6 @@
-﻿@model Domain.Entities.Supplier
+﻿@using Domain.Entities
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Domain.Entities.Supplier
 
 @{
     ViewData["Title"] = "Details";
@@ -64,3 +66,4 @@
     @Html.ActionLink("Düzenle", "Edit", new { id = Model.Id  }) |
     <a asp-action="List">Listeye Dön</a>
 </div>
+

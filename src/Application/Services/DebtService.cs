@@ -125,5 +125,18 @@ namespace Application.Services
             }
             return list;
         }
+
+        public List<DebtLog> GetSupplierDebtLogs(int supplierId)
+        {
+            var isValid = _unitOfWork.SupplierRepository.Any(x => !x.DeletedDate.HasValue && x.Id == supplierId);
+            if (!isValid) return new();
+            var list = _unitOfWork.DebtLogRepository
+                .Get(x => x.SupplierId == supplierId)
+                .Include(x => x.Supplier)
+                .Include(x => x.Customer)
+                .Include(x => x.User)
+                .ToList();
+            return list;
+        }
     }
 }

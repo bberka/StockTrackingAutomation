@@ -5,170 +5,198 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Borç Takip Listesi</h1>
 
 
-<p>
-    <h3>
-        Müşteriden Alınan Para Kayıtları
-    </h3>
-    <a asp-action="CustomerDebtLogCreate">Yeni Kayıt Ekle</a>
 
-</p>
+<div class="card shadow mb-4">
+    <div class="card-header py-3 ">
+        <div class="row px-3">
+            <div class="d-flex justify-content-between">
+                <h2 class="m-0 font-weight-bold text-black">Müşteriden Alınan Para Kayıtları</h2>
+                <a asp-action="CustomerDebtLogCreate" class="btn btn-success ">Yeni Kayıt Ekle</a>
+            </div>
+        </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RegisterDate)
-            </th>
 
-            <th>
-                @Html.DisplayNameFor(model => model.TypeString)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Money)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Where(x => x.CustomerId.HasValue))
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegisterDate)
-                </td>
-                <td>
-                    @if (item.Type == 1)
-                    {
-                        <div class="text-success">
-                            @Html.DisplayFor(modelItem => item.TypeString)
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
 
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-danger">
-                            @Html.DisplayFor(modelItem => item.TypeString)
-                        </div>
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink(item.Customer?.CompanyName ?? "","Details","Customer", new { id = item.CustomerId })
-                </td>
+                <table class="table" id="my_DataTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.RegisterDate)
+                            </th>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Money)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TypeString)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CustomerId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Money)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UserId)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(x => x.CustomerId.HasValue))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RegisterDate)
+                                </td>
+                                <td>
+                                    @if (item.Type == 1)
+                                    {
+                                        <div class="text-success">
+                                            @Html.DisplayFor(modelItem => item.TypeString)
 
-                <td>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-danger">
+                                            @Html.DisplayFor(modelItem => item.TypeString)
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.ActionLink(item.Customer?.CompanyName ?? "","Details","Customer", new { id = item.CustomerId })
+                                </td>
 
-                    @Html.DisplayFor(modelItem => item.User.EmailAddress)
-                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Money)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
 
-            </tr>
-        }
-    </tbody>
-</table>
+                                <td>
 
+                                    @Html.DisplayFor(modelItem => item.User.EmailAddress)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <br />
 <br />
-<p>
-    <h3>
-        Tedarikçiye Verilen Para Kayıtları
 
-    </h3>
-    <a asp-action="SupplierDebtLogCreate">Yeni Kayıt Ekle</a>
-</p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RegisterDate)
-            </th>
+<div class="card shadow mb-4">
+    <div class="card-header py-3 ">
+        <div class="row px-3">
+            
+            <div class="d-flex justify-content-between">
+                <h2 class="m-0 font-weight-bold text-black">Tedarikçiye Verilen Para Kayıtları</h2>
+                <a asp-action="SupplierDebtLogCreate" class="btn btn-success ">Yeni Kayıt Ekle</a>
+            </div>
+        </div>
 
-            <th>
-                @Html.DisplayNameFor(model => model.TypeString)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SupplierId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Money)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Where(x => x.SupplierId.HasValue))
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegisterDate)
-                </td>
-                <td>
-                    @if (item.Type == 1)
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+              
+                <table class="table" id="my_DataTable_2">
+                    <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegisterDate)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.TypeString)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SupplierId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Money)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserId)
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.Where(x => x.SupplierId.HasValue))
                     {
-                        <div class="text-success">
-                            @Html.DisplayFor(modelItem => item.TypeString)
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RegisterDate)
+                            </td>
+                            <td>
+                                @if (item.Type == 1)
+                                {
+                                    <div class="text-success">
+                                        @Html.DisplayFor(modelItem => item.TypeString)
 
-                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="text-danger">
+                                        @Html.DisplayFor(modelItem => item.TypeString)
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink(item.Supplier?.CompanyName ?? "","Details","Supplier", new { id = item.SupplierId })
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Money)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.User.EmailAddress)
+                            </td>
+
+                        </tr>
                     }
-                    else
-                    {
-                        <div class="text-danger">
-                            @Html.DisplayFor(modelItem => item.TypeString)
-                        </div>
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink(item.Supplier?.CompanyName ?? "","Details","Supplier", new { id = item.SupplierId })
-                </td>
+                    </tbody>
+                </table>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Money)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
 
-                <td>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    @Html.DisplayFor(modelItem => item.User.EmailAddress)
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>

@@ -23,6 +23,9 @@
     <Reference Include="EasMe.EntityFrameworkCore">
       <HintPath>..\..\..\easme-lib\bin\Release\net6.0\EasMe.EntityFrameworkCore.dll</HintPath>
     </Reference>
+    <Reference Include="EasMe.Logging">
+      <HintPath>..\..\..\easme-lib\bin\Release\net6.0\EasMe.Logging.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

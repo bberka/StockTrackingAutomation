@@ -2,16 +2,19 @@ using Application.Services;
 using Domain.Abstract;
 using EasMe.Logging;
 using Infrastructure;
+using StockTrackingAutomation.Web.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(x =>
+{
+    x.Filters.Add<ExceptionHandleFilter>();
+});
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(720);
+    options.IdleTimeout = TimeSpan.FromMinutes(720);
     options.Cookie.HttpOnly = true;
     // Make the session cookie essential
     options.Cookie.IsEssential = true;

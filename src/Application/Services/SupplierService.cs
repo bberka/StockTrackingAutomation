@@ -19,7 +19,7 @@ namespace Application.Services
 		{
 			var supplier = _unitOfWork.SupplierRepository.Get(x => x.Id == id )
                 .Include(x => x.DebtLogs)
-                .Include(x => x.BuyLogs)
+                .Include(x => x.Purchases)
                 .FirstOrDefault();
             if (supplier is null) return Result.Warn(1, "Tedarikçi bulunamadı");
 			if(supplier.DeletedDate.HasValue) return Result.Warn(2, "Tedarikçi silinmiş");
@@ -30,7 +30,7 @@ namespace Application.Services
 			return _unitOfWork.SupplierRepository
                 .Get(x => !x.DeletedDate.HasValue)
                 .Include(x => x.DebtLogs)
-                .Include(x => x.BuyLogs)
+                .Include(x => x.Purchases)
                 .ToList();
 		}
 		public Result AddSupplier(Supplier supplier)

@@ -3,18 +3,20 @@
 @{
     ViewData["Title"] = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var supplier = Model.FirstOrDefault()?.Supplier ?? new();
 }
 
 
 <div class="card shadow mb-4">
-    <div class="card-header py-3  ">
-        <div class="row px-3 ">
+    <div class="card-header py-3 ">
+        <div class="row px-3">
             <div class="d-flex justify-content-between">
-                <h2 class="m-0 font-weight-bold text-black">Alışlar</h2>
-                <a asp-action="Create" class="btn btn-success ">Yeni Kayıt Ekle</a>
-
+                <h2 class="m-0 font-weight-bold text-black">Tedarikçi Alış Listesi</h2>
+                <h5>
+                    Tedarikçi Şirket:
+                    @Html.ActionLink(supplier.CompanyName ?? "", "Details", "Supplier", new { id = supplier.Id })
+                </h5>
             </div>
-            
         </div>
 
 
@@ -22,7 +24,8 @@
     <div class="card-body">
         <div class="row">
             <div class="col">
-              
+
+
                 <table class="table" id="my_DataTable">
                     <thead>
                         <tr>
@@ -38,9 +41,7 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Count)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.SupplierId)
-                            </th>
+                        
                             <th>
                                 @Html.DisplayNameFor(model => model.PricePerUnit)
                             </th>
@@ -69,10 +70,7 @@
                                     @Html.DisplayFor(modelItem => item.Count)
                                 </td>
 
-                                <td>
-                                    @Html.ActionLink(item.Supplier.Name,"Edit","Supplier", new { id = item.SupplierId })
-
-                                </td>
+                             
                                 <td>
                                     @Html.DisplayFor(modelItem => item.PricePerUnit)
                                 </td>
@@ -88,6 +86,8 @@
                         }
                     </tbody>
                 </table>
+
+
 
             </div>
         </div>

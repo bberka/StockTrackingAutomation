@@ -36,6 +36,20 @@ namespace Application.Services
             return list;
         }
 
+        public List<Purchase> GetSupplierPurchases(int supplierId)
+        {
+            var isValid = _unitOfWork.SupplierRepository.Any(x => !x.DeletedDate.HasValue && x.Id == supplierId);
+            if (!isValid) return new();
+            var list = _unitOfWork.PurchaseRepository.Get(x => x.SupplierId == supplierId)
+                .Include(x => x.Product)
+                .Include(x => x.Supplier)
+                .Include(x => x.User)
+                .ToList();
+            var products = _productMgr.GetValidProducts().Select(x => x.Id);
+            list.RemoveAll(x => !products.Contains(x.ProductId));
+            return list;
+        }
+
         public Result AddBuyLog(Purchase data)
         {
             var product = _unitOfWork.ProductRepository.Find(data.ProductId);

@@ -5,58 +5,90 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Kullanıcı Listesi</h1>
 
-<p>
-    <a asp-action="Create">Yeni Kullanıcı Ekle</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsValid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RegisterDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmailAddress)
-            </th>
 
-            <th>
-                @Html.DisplayNameFor(model => model.RoleType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsValid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegisterDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailAddress)
-            </td>
+<div class="card shadow mb-4">
+    <div class="card-header py-3 ">
+        <div class="row px-3">
+            <div class="d-flex justify-content-between">
+                <h2 class="m-0 font-weight-bold text-black">Kullanıcılar</h2>
+                <a asp-action="Create" class="btn btn-success ">Yeni Kullanıcı Ekle</a> 
+            </div>
+        </div>
+
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+               
+                <table class="table" id="my_DataTable">
+                    <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsValid)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegisterDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.EmailAddress)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.RoleType)
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsValid)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RegisterDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmailAddress)
+                            </td>
      
-            <td>
-                @Html.DisplayFor(modelItem => item.RoleString)
-            </td>
-            <td>
-                    @Html.ActionLink("Düzenle", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("Detay", "Details", new { id=item.Id }) |
-                    @Html.ActionLink("Sil", "Delete", new { id=item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RoleString)
+                            </td>
+                            <td>
+                                
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Menü
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }, new { @class = "dropdown-item text-success" })
+                                        @Html.ActionLink("Detay", "Details", new { id = item.Id }, new { @class = "dropdown-item text-info " })
+                                        <div class="dropdown-divider"></div>
+                                        
+                                        @Html.ActionLink("Sil", "Delete", new { id = item.Id }, new { @class = "text-danger dropdown-item" })
+                                    </div>
+                                </div>
+                                
+
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

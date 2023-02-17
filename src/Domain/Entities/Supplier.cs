@@ -35,6 +35,6 @@
         public DateTime? DeletedDate { get; set; }
 
         public virtual List<DebtLog> DebtLogs { get; set; } = new();
-        public virtual List<Purchase> BuyLogs { get; set; } = new();
+        public virtual List<Purchase> Purchases { get; set; } = new();
     }
 }

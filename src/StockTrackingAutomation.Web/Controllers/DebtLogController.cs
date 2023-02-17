@@ -26,10 +26,16 @@ namespace StockTrackingAutomation.Web.Controllers
             _supplierService = supplierService;
         }
         [HttpGet]
+        public IActionResult SupplierDebtLog(int id)
+        {
+            var list = _debtService.GetSupplierDebtLogs(id);
+            return View(list);
+        }
+
+        [HttpGet]
         public IActionResult List()
         {
             var list = _debtService.GetValidList();
-            logger.Info("DebtLogList: " + list.Count);
             return View(list);
         }
         [HttpGet]
