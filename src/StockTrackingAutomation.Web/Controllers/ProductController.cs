@@ -1,6 +1,5 @@
-﻿using Application.Manager;
+﻿using Domain.Abstract;
 using Domain.Entities;
-using EasMe.Extensions;
 using EasMe.Logging;
 using Microsoft.AspNetCore.Mvc;
 using StockTrackingAutomation.Web.Filters;

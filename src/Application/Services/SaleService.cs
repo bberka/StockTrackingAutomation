@@ -1,17 +1,11 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using EasMe.Models;
-using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Manager
+namespace Application.Services
 {
-    public interface ISaleService
-    {
-        List<Sale> GetValidList();
-        Result AddSaleLog(Sale data);
-    }
-
+    
     public class SaleService : ISaleService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -68,6 +62,22 @@ namespace Application.Manager
                 return Result.Error(4, "DbError");
             }
             return Result.Success();
+        }
+
+        public ResultData<Sale> GetSale(int id)
+        {
+            var data = _unitOfWork.SaleRepository
+                .Get(x => x.Id == id)
+                .Include(x => x.Customer)
+                .Include(x => x.User)
+                .Include(x => x.Product)
+                .FirstOrDefault();
+            if (data is null)
+            {
+                return Result.Warn(1,"Satış bulunmadı");
+            }
+
+            return data;
         }
     }
 }

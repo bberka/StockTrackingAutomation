@@ -3,16 +3,9 @@ using Domain.Entities;
 using EasMe.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Manager
+namespace Application.Services
 {
-	public interface ISupplierService
-    {
-        ResultData<Supplier> GetValidSupplier(int id);
-        List<Supplier> GetValidSuppliers();
-        Result AddSupplier(Supplier supplier);
-        Result RemoveSupplier(int id);
-        Result UpdateSupplier(Supplier supplier);
-    }
+
 
     public class SupplierService : ISupplierService
     {
@@ -34,7 +27,11 @@ namespace Application.Manager
         }
 		public List<Supplier> GetValidSuppliers()
 		{
-			return _unitOfWork.SupplierRepository.GetList(x => !x.DeletedDate.HasValue);
+			return _unitOfWork.SupplierRepository
+                .Get(x => !x.DeletedDate.HasValue)
+                .Include(x => x.DebtLogs)
+                .Include(x => x.BuyLogs)
+                .ToList();
 		}
 		public Result AddSupplier(Supplier supplier)
 		{

@@ -2,16 +2,9 @@
 using Domain.Entities;
 using EasMe.Models;
 
-namespace Application.Manager
+namespace Application.Services
 {
-    public interface IProductService
-    {
-        List<Product> GetValidProducts();
-        Product? GetProduct(int id);
-        Result UpdateProduct(Product product);
-        Result AddProduct(Product product);
-        Result DeleteProduct(int id);
-    }
+
 
     public class ProductService : IProductService
     {

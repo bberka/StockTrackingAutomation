@@ -3,16 +3,9 @@ using Domain.Entities;
 using EasMe.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Manager
+namespace Application.Services
 {
-    public interface ICustomerService
-    {
-        List<Customer> GetValidCustomers();
-        ResultData<Customer> GetValidCustomer(int id);
-        Result UpdateCustomer(Customer customer);
-        Result AddCustomer(Customer customer);
-        Result DeleteCustomer(int id);
-    }
+
 
     public class CustomerService : ICustomerService
     {

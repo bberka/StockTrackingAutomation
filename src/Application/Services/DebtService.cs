@@ -3,14 +3,9 @@ using Domain.Entities;
 using EasMe.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Manager
+namespace Application.Services
 {
-    public interface IDebtService
-    {
-        Result AddCustomerDebtLogRecord(DebtLog log, int authorUserId);
-        Result AddSupplierDebtLogRecord(DebtLog log, int authorUserId);
-        List<DebtLog> GetValidList();
-    }
+
 
     public class DebtService : IDebtService
     {
@@ -93,7 +88,6 @@ namespace Application.Manager
                 return Result.Error(1, "DbError");
             }
             return Result.Success();
-            throw new NotImplementedException();
         }
 
         public List<DebtLog> GetValidList()
@@ -104,8 +98,14 @@ namespace Application.Manager
                 .Include(x => x.Customer)
                 .Include(x => x.User)
                 .ToList();
-            var customers = _customerService.GetValidCustomers().Select(x => x.Id).ToList();
-            var suppliers = _supplierService.GetValidSuppliers().Select(x => x.Id).ToList();
+            var customers = _customerService
+                .GetValidCustomers()
+                .Select(x => x.Id)
+                .ToList();
+            var suppliers = _supplierService
+                .GetValidSuppliers()
+                .Select(x => x.Id)
+                .ToList();
             foreach(var item in list)
             {
                 if(item.CustomerId != null)

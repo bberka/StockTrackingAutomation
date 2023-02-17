@@ -1,5 +1,4 @@
-﻿using Application.Manager;
-using Domain.Helpers;
+﻿using Domain.Helpers;
 using Domain.Models;
 using EasMe.Extensions;
 using EasMe.Logging;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using StockTrackingAutomation.Web.Filters;
 using StockTrackingAutomation.Web.Models;
 using System.Diagnostics;
+using Domain.Abstract;
 
 namespace StockTrackingAutomation.Web.Controllers
 {

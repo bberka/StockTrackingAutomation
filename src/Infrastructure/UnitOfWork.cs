@@ -1,8 +1,10 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using EasMe.EntityFrameworkCore.V1;
+using EasMe.Extensions;
 using EasMe.Logging;
 using Infrastructure.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
@@ -41,6 +43,7 @@ public class UnitOfWork : IUnitOfWork
     public IEntityRepository<User> UserRepository { get; }
     public bool Save()
     {
+        var entityNames = DetectChangedProperties();
         using var transaction = _dbContext.Database.BeginTransaction();
         try
         {
@@ -53,9 +56,51 @@ public class UnitOfWork : IUnitOfWork
         }
         catch (Exception ex)
         {
-            logger.Exception(ex,"InternalDbError");
+            if (!entityNames.IsNullOrEmpty())
+            {
+                logger.Fatal(ex, "InternalDbError", entityNames);
+            }
+            else
+            {
+                logger.Fatal(ex, "InternalDbError");
+            }
         }
         transaction.Rollback();
         return false;
+    }
+    /// <summary>
+    /// Detects changed entities and properties and inserts it to <see cref="ChangeLogRepository"/> before saving database
+    /// </summary>
+    /// <returns>Changed entity names</returns>
+    private string DetectChangedProperties()
+    {
+        var modifiedEntities = _dbContext.ChangeTracker
+            .Entries()
+            .Where(p => p.State == EntityState.Modified)
+            .ToList();
+
+        var entityNames = "";
+        //var logs = new List<ChangeLog>();
+        foreach (var change in modifiedEntities)
+        {
+            var entityName = change.Entity.GetType().Name;
+            entityNames += entityName + ",";
+            foreach (var prop in change.OriginalValues.Properties)
+            {
+                var originalValue = change.OriginalValues[prop]?.ToString();
+                var currentValue = change.CurrentValues[prop]?.ToString();
+                if (originalValue == currentValue) continue;
+                //ChangeLog log = new ChangeLog()
+                //{
+                //    EntityName = entityName,
+                //    PropertyName = prop.Name,
+                //    OldValue = originalValue,
+                //    NewValue = currentValue,
+                //};
+                //logs.Add(log);
+            }
+        }
+        //ChangeLogRepository.InsertRange(logs);
+        return entityNames;
     }
 }

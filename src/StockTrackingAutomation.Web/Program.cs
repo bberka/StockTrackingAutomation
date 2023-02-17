@@ -1,7 +1,5 @@
-using Application.Manager;
+using Application.Services;
 using Domain.Abstract;
-using Domain.Entities;
-using EasMe;
 using EasMe.Logging;
 using Infrastructure;
 
@@ -27,7 +25,7 @@ builder.Services.AddDistributedMemoryCache();
 //    x.Filters.Add(new ExceptionHandleFilter());
 //});
 //ADD Business services dependency
-builder.Services.AddScoped<IBuyLogMgr, PurchaseService>();
+builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IDebtService, DebtService>();
 builder.Services.AddScoped<IProductService, ProductService>();

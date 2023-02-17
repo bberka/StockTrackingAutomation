@@ -3,15 +3,11 @@ using Domain.Entities;
 using EasMe.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Manager
+namespace Application.Services
 {
-    public interface IBuyLogMgr
-    {
-        List<Purchase> GetValidList();
-        Result AddBuyLog(Purchase data);
-    }
 
-    public class PurchaseService : IBuyLogMgr
+
+    public class PurchaseService : IPurchaseService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProductService _productMgr;

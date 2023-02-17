@@ -1,12 +1,9 @@
-﻿using Application.Manager;
+﻿using Domain.Abstract;
 using Domain.Enums;
 using Domain.Helpers;
 using Domain.Models;
-using EasMe;
-using EasMe.Extensions;
 using EasMe.Logging;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using StockTrackingAutomation.Web.Filters;
 
 namespace StockTrackingAutomation.Web.Controllers
@@ -14,24 +11,24 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter(RoleType.Owner)]
     public class PurchaseController : Controller
     {
-        private readonly IBuyLogMgr _buyLogMgr;
+        private readonly IPurchaseService _purchaseService;
         private readonly ISupplierService _supplierMgr;
         private readonly IProductService _productMgr;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
         public PurchaseController(
-            IBuyLogMgr buyLogMgr,
+            IPurchaseService purchaseService,
             ISupplierService supplierMgr,
             IProductService productMgr)
         {
-            _buyLogMgr = buyLogMgr;
+            _purchaseService = purchaseService;
             _supplierMgr = supplierMgr;
             _productMgr = productMgr;
         }
         [HttpGet]
         public IActionResult List()
         {
-            var list = _buyLogMgr.GetValidList();
+            var list = _purchaseService.GetValidList();
             logger.Info("BuyLogList: " + list.Count);
             return View(list);
         }
@@ -53,7 +50,7 @@ namespace StockTrackingAutomation.Web.Controllers
             viewModel.Suppliers = _supplierMgr.GetValidSuppliers();
             var userNo = HttpContext.GetUser().Id;
             viewModel.Data.UserId = userNo;
-            var res = _buyLogMgr.AddBuyLog(viewModel.Data);
+            var res = _purchaseService.AddBuyLog(viewModel.Data);
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
