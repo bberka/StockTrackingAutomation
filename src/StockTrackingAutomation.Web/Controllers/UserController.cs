@@ -1,6 +1,8 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.Helpers;
+using Domain.Models;
 using EasMe.Logging;
 using Microsoft.AspNetCore.Mvc;
 using StockTrackingAutomation.Web.Filters;
@@ -10,31 +12,31 @@ namespace StockTrackingAutomation.Web.Controllers
     [AuthFilter(RoleType.Owner)]
     public class UserController : Controller
     {
-        private readonly IUserService _userMgr;
+        private readonly IUserService _userService;
         private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
-        public UserController(IUserService userMgr)
+        public UserController(IUserService userService)
         {
-            _userMgr = userMgr;
+            _userService = userService;
         }
         [HttpGet]
         public IActionResult List()
         {
-            var list = _userMgr.GetValidUsers();
+            var list = _userService.GetList();
             logger.Info("User list count:" + list.Count);
             return View(list);
         }
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var user = _userMgr.GetUser(id);
+            var user = _userService.GetUser(id);
             logger.Info("User details:" + id);
             return View(user);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var user = _userMgr.GetUser(id);
+            var user = _userService.GetUser(id);
             logger.Info("User edit:" + id);
             return View(user);
         }
@@ -42,7 +44,7 @@ namespace StockTrackingAutomation.Web.Controllers
         public IActionResult Edit(User user)
         {
            
-            var res = _userMgr.UpdateUser(user);
+            var res = _userService.UpdateUser(user);
             if (!res.IsSuccess)
             {
                 ModelState.AddModelError("", res.ErrorCode);
@@ -60,7 +62,7 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpPost]
         public IActionResult Create(User user)
         {
-            var res = _userMgr.Register(user);
+            var res = _userService.Register(user);
             if (!res.IsSuccess)
             {
                 logger.Warn("User add:" + user.EmailAddress, res.Rv + res.ErrorCode);
@@ -73,7 +75,7 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var res = _userMgr.DeleteUser(id);
+            var res = _userService.DeleteUser(id);
             if (!res.IsSuccess)
             {
                 logger.Warn("User delete:" + id, res.Rv + res.ErrorCode);
@@ -83,5 +85,7 @@ namespace StockTrackingAutomation.Web.Controllers
             logger.Info("User delete:" + id);
             return RedirectToAction("List");
         }
+
+       
     }
 }

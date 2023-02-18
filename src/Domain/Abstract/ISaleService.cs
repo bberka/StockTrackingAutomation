@@ -5,7 +5,8 @@ namespace Domain.Abstract;
 
 public interface ISaleService
 {
-    List<Sale> GetValidList();
+    List<Sale> GetList();
+    List<Sale> GetCustomerSales(int customerId);
     Result AddSaleLog(Sale data);
-    ResultData<Sale> GetSale(int id);
+
 }

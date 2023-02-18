@@ -9,7 +9,8 @@ public interface IUserService
     ResultData<User> Login(LoginModel model);
     Result Register(User user);
     Result UpdateUser(User user);
-    List<User> GetValidUsers();
+    List<User> GetList();
     Result DeleteUser(int id);
-    User? GetUser(int id);
+    ResultData<User> GetUser(int id);
+    Result ChangePassword(int userId, ChangePasswordModel model);
 }

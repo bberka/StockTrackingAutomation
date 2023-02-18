@@ -5,7 +5,7 @@ namespace Domain.Abstract;
 
 public interface IPurchaseService
 {
-    List<Purchase> GetValidList();
+    List<Purchase> GetList();
     List<Purchase> GetSupplierPurchases(int supplierId);
     Result AddBuyLog(Purchase data);
 }

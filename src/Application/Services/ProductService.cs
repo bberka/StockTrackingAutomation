@@ -14,7 +14,7 @@ namespace Application.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public List<Product> GetValidProducts()
+        public List<Product> GetList()
         {
             return _unitOfWork.ProductRepository.GetList(x => !x.DeletedDate.HasValue);
         }

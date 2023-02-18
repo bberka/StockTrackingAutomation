@@ -2,6 +2,8 @@
 using Domain.Entities;
 using Domain.Models;
 using EasMe;
+using EasMe.Extensions;
+using EasMe.Helpers;
 using EasMe.Models;
 
 namespace Application.Services
@@ -35,6 +37,19 @@ namespace Application.Services
             {
                 return ResultData<User>.Error(3, "Rol belirlenmemiş");
             }
+
+            var ctx = HttpContextHelper.Current;
+            var ip = ctx?.Connection.RemoteIpAddress.ToString();
+            var useragent = ctx?.Request.GetUserAgent();
+            if (ip is not null || useragent is not null)
+            {
+                user.LastLoginIp = ip;
+                user.LastLoginUserAgent = useragent;
+                user.LastLoginDate = DateTime.Now;
+                _unitOfWork.UserRepository.Update(user);
+                _unitOfWork.Save();
+            }
+            
             return ResultData<User>.Success(user);
         }
         public Result Register(User user)
@@ -69,7 +84,7 @@ namespace Application.Services
             }
             return Result.Success();
         }
-        public List<User> GetValidUsers()
+        public List<User> GetList()
         {
             return _unitOfWork.UserRepository.GetList(x => x.IsValid == true && !x.DeletedDate.HasValue);
         }
@@ -96,9 +111,51 @@ namespace Application.Services
             return Result.Success();
         }
 
-        public User? GetUser(int id)
+        public ResultData<User> GetUser(int id)
         {
-            return _unitOfWork.UserRepository.Find(id);
+            var user = _unitOfWork.UserRepository.Find(id);
+            if (user is null)
+            {
+                return Result.Warn(1, "Kullanıcı bulunamadı");
+            }
+
+            if (!user.IsValid)
+            {
+                return Result.Error(2, "Kullanıcı geçersiz");
+            }
+            if (user.DeletedDate.HasValue)
+            {
+                return Result.Error(3, "Kullanıcı silinmiş");
+            }
+            return user;
+        }
+
+        public Result ChangePassword(int userId, ChangePasswordModel model)
+        {
+            var userResult = GetUser(userId);
+            if (userResult.IsFailure)
+            {
+                return userResult.ToResult(100);
+            }
+
+            var user = userResult.Data;
+            var encryptedPassword = model.OldPassword.MD5Hash().ToBase64String();
+            if (string.CompareOrdinal(user?.Password, encryptedPassword) != 0)
+            {
+                return Result.Warn(1, "Şifre yanlış");
+            }
+
+            if (model.NewPassword != model.NewPasswordConfirm)
+            {
+                return Result.Warn(2, "Yeni şifreler aynı değil");
+            }
+
+            var newEncryptedPassword = model.NewPasswordConfirm.MD5Hash().ToBase64String();
+            user.Password = newEncryptedPassword;
+            user.PasswordLastUpdateDate = DateTime.Now;
+            _unitOfWork.UserRepository.Update(user);
+            return _unitOfWork.SaveResult(3);
+
         }
     }
 }

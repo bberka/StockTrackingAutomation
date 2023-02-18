@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var supplier = Model.FirstOrDefault()?.Supplier ?? new();
+    var customer = Model.FirstOrDefault()?.Customer ?? new();
 }
 
 
@@ -14,8 +14,8 @@
             <div class="justify-content-between d-flex">
                 <h2 class="m-0 font-weight-bold text-black">Tedarikçiye Verilen Para Kayıtları</h2>
                 <h5>
-                    Tedarikçi Şirket:
-                    @Html.ActionLink(supplier.CompanyName, "Details", "Supplier", new { id = supplier.Id })
+                    Müşteri:
+                    @Html.ActionLink(customer.Name, "Details", "Supplier", new { id = customer.Id })
                 </h5>
             </div>
            
@@ -53,7 +53,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var item in Model.Where(x => x.SupplierId.HasValue))
+                    @foreach (var item in Model.Where(x => x.CustomerId.HasValue))
                     {
                         <tr>
                             <td>

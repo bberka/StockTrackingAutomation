@@ -25,7 +25,7 @@ namespace Application.Services
    
         public Result AddCustomerDebtLogRecord(DebtLog log, int authorUserId)
         {
-            var customerResult = _customerService.GetValidCustomer(log.CustomerId.Value);
+            var customerResult = _customerService.GetCustomer(log.CustomerId.Value);
             if (customerResult.IsFailure)
             {
                 return customerResult.ToResult(100);
@@ -59,7 +59,7 @@ namespace Application.Services
 
         public Result AddSupplierDebtLogRecord(DebtLog log, int authorUserId)
         {
-            var supplierResult = _supplierService.GetValidSupplier(log.SupplierId.Value);
+            var supplierResult = _supplierService.GetSupplier(log.SupplierId.Value);
             if (supplierResult.IsFailure)
             {
                 return supplierResult.ToResult(100);
@@ -90,7 +90,7 @@ namespace Application.Services
             return Result.Success();
         }
 
-        public List<DebtLog> GetValidList()
+        public List<DebtLog> GetList()
         {
             var list = _unitOfWork.DebtLogRepository
                 .Get()
@@ -99,11 +99,11 @@ namespace Application.Services
                 .Include(x => x.User)
                 .ToList();
             var customers = _customerService
-                .GetValidCustomers()
+                .GetCustomers()
                 .Select(x => x.Id)
                 .ToList();
             var suppliers = _supplierService
-                .GetValidSuppliers()
+                .GetList()
                 .Select(x => x.Id)
                 .ToList();
             foreach(var item in list)
@@ -132,6 +132,19 @@ namespace Application.Services
             if (!isValid) return new();
             var list = _unitOfWork.DebtLogRepository
                 .Get(x => x.SupplierId == supplierId)
+                .Include(x => x.Supplier)
+                .Include(x => x.Customer)
+                .Include(x => x.User)
+                .ToList();
+            return list;
+        }
+
+        public List<DebtLog> GetCustomerDebtLogs(int customerId)
+        {
+            var isValid = _unitOfWork.CustomerRepository.Any(x => !x.DeletedDate.HasValue && x.Id == customerId);
+            if (!isValid) return new();
+            var list = _unitOfWork.DebtLogRepository
+                .Get(x => x.CustomerId == customerId)
                 .Include(x => x.Supplier)
                 .Include(x => x.Customer)
                 .Include(x => x.User)

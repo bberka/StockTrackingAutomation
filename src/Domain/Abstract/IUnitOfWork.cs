@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using EasMe.Models;
 
 namespace Domain.Abstract;
 
@@ -12,5 +13,6 @@ public interface IUnitOfWork : IDisposable
     IEntityRepository<Supplier> SupplierRepository { get; }
     IEntityRepository<User> UserRepository { get; }
     bool Save();
+    Result SaveResult(ushort rv);
 
 }

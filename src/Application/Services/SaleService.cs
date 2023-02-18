@@ -21,7 +21,7 @@ namespace Application.Services
             _productService = productService;
             _customerService = customerService;
         }
-		public List<Sale> GetValidList()
+		public List<Sale> GetList()
 		{
             var list = _unitOfWork.SaleRepository
                 .Get()
@@ -29,18 +29,32 @@ namespace Application.Services
                 .Include(x => x.User)
                 .Include(x => x.Customer)
                 .ToList();
-            var products = _productService.GetValidProducts().Select(x => x.Id);
+            var products = _productService.GetList().Select(x => x.Id);
             list.RemoveAll(x => !products.Contains(x.ProductId));
 			return list;
         }
-		public Result AddSaleLog(Sale data)
+
+        public List<Sale> GetCustomerSales(int customerId)
+        {
+            var list = _unitOfWork.SaleRepository
+                .Get(x => x.CustomerId == customerId)
+                .Include(x => x.Product)
+                .Include(x => x.User)
+                .Include(x => x.Customer)
+                .ToList();
+            var products = _productService.GetList().Select(x => x.Id);
+            list.RemoveAll(x => !products.Contains(x.ProductId));
+            return list;
+        }
+
+        public Result AddSaleLog(Sale data)
 		{
             var product = _unitOfWork.ProductRepository.Find(data.ProductId);
             if (product is null)
             {
                 return Result.Error(1, "Ürün bulunamadı");
             }
-            var customerResult = _customerService.GetValidCustomer(data.CustomerId);
+            var customerResult = _customerService.GetCustomer(data.CustomerId);
             if (customerResult.IsFailure)
             {
                 return customerResult.ToResult(100);

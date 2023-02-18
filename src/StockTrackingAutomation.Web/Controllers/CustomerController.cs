@@ -20,21 +20,21 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var list = _customerService.GetValidCustomers();
+            var list = _customerService.GetCustomers();
             logger.Info("Customer list count:" + list.Count);
             return View(list);
         }
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var user = _customerService.GetValidCustomer(id);
+            var user = _customerService.GetCustomer(id);
             logger.Info("Customer details:" + id);
             return View(user.Data);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var user = _customerService.GetValidCustomer(id);
+            var user = _customerService.GetCustomer(id);
             logger.Info("Customer edit:" + id);
             return View(user.Data);
         }

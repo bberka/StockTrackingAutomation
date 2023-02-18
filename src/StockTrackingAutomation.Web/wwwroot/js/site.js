@@ -48,6 +48,16 @@ function SelectNav() {
         myElement.classList.add("active");
         return;
     }
+    if (currentUrl.includes("ChangePassword")) {
+        var myElement = navBarItems[9];
+        myElement.classList.add("active");
+        return;
+    }
+    if (currentUrl.includes("Account")) {
+        var myElement = navBarItems[8];
+        myElement.classList.add("active");
+        return;
+    }
 }
 
 function RemoveActiveFromAllNav() {

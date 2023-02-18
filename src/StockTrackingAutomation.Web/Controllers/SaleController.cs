@@ -1,4 +1,5 @@
-﻿using Domain.Abstract;
+﻿using Application.Services;
+using Domain.Abstract;
 using Domain.Enums;
 using Domain.Helpers;
 using Domain.Models;
@@ -27,9 +28,16 @@ namespace StockTrackingAutomation.Web.Controllers
             _customerService = customerService;
         }
         [HttpGet]
+        public IActionResult CustomerSales(int id)
+        {
+            var list = _saleService.GetCustomerSales(id);
+            return View(list);
+        }
+
+        [HttpGet]
         public IActionResult List()
         {
-            var list = _saleService.GetValidList();
+            var list = _saleService.GetList();
             logger.Info("SaleLogList: " + list.Count);
             return View(list);
         }
@@ -38,16 +46,16 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var res = new SaleLogCreateViewModel
             {
-                Products = _productService.GetValidProducts(),
-                Customers = _customerService.GetValidCustomers()
+                Products = _productService.GetList(),
+                Customers = _customerService.GetCustomers()
             };
             return View(res);
         }
         [HttpPost]
         public IActionResult Create(SaleLogCreateViewModel viewModel)
         {
-            viewModel.Products = _productService.GetValidProducts();
-            viewModel.Customers = _customerService.GetValidCustomers();
+            viewModel.Products = _productService.GetList();
+            viewModel.Customers = _customerService.GetCustomers();
             var userNo = HttpContext.GetUser().Id;
             viewModel.Data.UserId = userNo;
             var res = _saleService.AddSaleLog(viewModel.Data);

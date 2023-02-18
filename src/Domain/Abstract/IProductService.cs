@@ -5,7 +5,7 @@ namespace Domain.Abstract;
 
 public interface IProductService
 {
-    List<Product> GetValidProducts();
+    List<Product> GetList();
     Product? GetProduct(int id);
     Result UpdateProduct(Product product);
     Result AddProduct(Product product);

@@ -5,8 +5,8 @@ namespace Domain.Abstract;
 
 public interface ICustomerService
 {
-    List<Customer> GetValidCustomers();
-    ResultData<Customer> GetValidCustomer(int id);
+    List<Customer> GetCustomers();
+    ResultData<Customer> GetCustomer(int id);
     Result UpdateCustomer(Customer customer);
     Result AddCustomer(Customer customer);
     Result DeleteCustomer(int id);

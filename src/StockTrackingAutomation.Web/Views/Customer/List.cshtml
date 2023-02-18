@@ -84,6 +84,9 @@
                                         @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }, new { @class = "dropdown-item text-success" })
                                         @Html.ActionLink("Detay", "Details", new { id = item.Id }, new { @class = "dropdown-item text-info" })
                                         <div class="dropdown-divider"></div>
+                                            @Html.ActionLink("Borç Kayıtları", "CustomerDebtLog", "DebtLog",new { id = item.Id }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Satışlar", "CustomerSales", "Sale",new { id = item.Id }, new { @class = "dropdown-item" })
+                                        <div class="dropdown-divider"></div>
 
                                         @Html.ActionLink("Sil", "Delete", new { id = item.Id }, new { @class = "text-danger dropdown-item" })
                                     </div>

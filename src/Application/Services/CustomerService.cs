@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
-
-
     public class CustomerService : ICustomerService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -15,14 +13,14 @@ namespace Application.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public List<Customer> GetValidCustomers()
+        public List<Customer> GetCustomers()
         {
             return _unitOfWork.CustomerRepository
                 .Get(x => !x.DeletedDate.HasValue)
                 .Include(x => x.DebtLogs)
                 .ToList();
         }
-        public ResultData<Customer> GetValidCustomer(int id)
+        public ResultData<Customer> GetCustomer(int id)
         {
             var customer = _unitOfWork.CustomerRepository
                 .Get(x => x.Id == id)
@@ -35,7 +33,7 @@ namespace Application.Services
 
         public Result UpdateCustomer(Customer customer)
         {
-            var customerResult = GetValidCustomer(customer.Id);
+            var customerResult = GetCustomer(customer.Id);
             if (customerResult.IsFailure)
             {
                 return customerResult.ToResult(100);
@@ -74,7 +72,7 @@ namespace Application.Services
 
         public Result DeleteCustomer(int id)
         {
-            var customerResult = GetValidCustomer(id);
+            var customerResult = GetCustomer(id);
             if (customerResult.IsFailure)
             {
                 return customerResult.ToResult(100);

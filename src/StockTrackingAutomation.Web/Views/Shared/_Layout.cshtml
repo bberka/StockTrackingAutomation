@@ -53,10 +53,16 @@
                         <i class="fas fa-users-gear fa-fw me-3"></i>
                         Kullanıcılar
                     </a>
-                    <a class="nav-link" asp-controller="User" asp-action="Settings" role="tab" aria-selected="false">
+                    <hr/>
+                    <a class="nav-link" asp-controller="Account" asp-action="Details" role="tab" aria-selected="false">
                         <i class="fas fa-user-gear fa-fw me-3"></i>
                         Hesabım
                     </a>
+                    <a class="nav-link" asp-controller="Account" asp-action="ChangePassword" role="tab" aria-selected="false">
+                        <i class="fas fa-user-gear fa-fw me-3"></i>
+                        Şifre Değiştir
+                    </a>
+                    <hr />
                     <a class="nav-link" asp-controller="Home" asp-action="Logout" role="tab" aria-selected="false">
                         <i class="fas fa-right-from-bracket fa-fw me-3"></i>
                         Çıkış Yap

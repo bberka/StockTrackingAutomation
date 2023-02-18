@@ -1,8 +1,10 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using EasMe.EntityFrameworkCore.V1;
+using EasMe.Enums;
 using EasMe.Extensions;
 using EasMe.Logging;
+using EasMe.Models;
 using Infrastructure.DAL;
 using Microsoft.EntityFrameworkCore;
 
@@ -67,6 +69,13 @@ public class UnitOfWork : IUnitOfWork
         }
         transaction.Rollback();
         return false;
+    }
+
+    public Result SaveResult(ushort rv)
+    {
+        var result = _dbContext.SaveChanges() > 0;
+        if (result) rv = 0;
+        return new Result(ResultSeverity.Fatal, rv, "InternalDbError");
     }
     /// <summary>
     /// Detects changed entities and properties and inserts it to <see cref="ChangeLogRepository"/> before saving database

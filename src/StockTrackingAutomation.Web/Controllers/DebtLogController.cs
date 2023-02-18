@@ -31,11 +31,16 @@ namespace StockTrackingAutomation.Web.Controllers
             var list = _debtService.GetSupplierDebtLogs(id);
             return View(list);
         }
-
+        [HttpGet]
+        public IActionResult CustomerDebtLog(int id)
+        {
+            var list = _debtService.GetCustomerDebtLogs(id);
+            return View(list);
+        }
         [HttpGet]
         public IActionResult List()
         {
-            var list = _debtService.GetValidList();
+            var list = _debtService.GetList();
             return View(list);
         }
         [HttpGet]
@@ -43,14 +48,14 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var res = new DebtLogCreateViewModel
             {
-                Customers = _customerService.GetValidCustomers()
+                Customers = _customerService.GetCustomers()
             };
             return View(res);
         }
         [HttpPost]
         public IActionResult CustomerDebtLogCreate(DebtLogCreateViewModel viewModel)
         {
-            viewModel.Customers = _customerService.GetValidCustomers();
+            viewModel.Customers = _customerService.GetCustomers();
             var userNo = HttpContext.GetUser().Id;
             var res = _debtService.AddCustomerDebtLogRecord(viewModel.Data, userNo);
             if (!res.IsSuccess)
@@ -67,14 +72,14 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var res = new DebtLogCreateViewModel
             {
-                Suppliers = _supplierService.GetValidSuppliers()
+                Suppliers = _supplierService.GetList()
             };
             return View(res);
         }
         [HttpPost]
         public IActionResult SupplierDebtLogCreate(DebtLogCreateViewModel viewModel)
         {
-            viewModel.Suppliers = _supplierService.GetValidSuppliers();
+            viewModel.Suppliers = _supplierService.GetList();
             var userNo = HttpContext.GetUser().Id;
             var res = _debtService.AddSupplierDebtLogRecord(viewModel.Data, userNo);
             if (!res.IsSuccess)

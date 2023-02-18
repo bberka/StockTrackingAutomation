@@ -15,7 +15,7 @@ namespace Application.Services
         {
             _unitOfWork = unitOfWork;
         }
-		public ResultData<Supplier> GetValidSupplier(int id)
+		public ResultData<Supplier> GetSupplier(int id)
 		{
 			var supplier = _unitOfWork.SupplierRepository.Get(x => x.Id == id )
                 .Include(x => x.DebtLogs)
@@ -25,7 +25,7 @@ namespace Application.Services
 			if(supplier.DeletedDate.HasValue) return Result.Warn(2, "Tedarikçi silinmiş");
             return supplier;
         }
-		public List<Supplier> GetValidSuppliers()
+		public List<Supplier> GetList()
 		{
 			return _unitOfWork.SupplierRepository
                 .Get(x => !x.DeletedDate.HasValue)

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Kullanıcı Detay</h1>
+<h1>Hesabım</h1>
 
 <div>
     <hr />
@@ -15,12 +15,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsValid)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsValid)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.RegisterDate)
@@ -65,26 +59,10 @@
             @Html.DisplayFor(model => model.PasswordLastUpdateDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeletedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeletedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RoleType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RoleType)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.RoleString)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.RoleString)
         </dd>
     </dl>
-</div>
-<div>
-    @Html.ActionLink("Düzenle", "Edit", new { id = Model.Id}) |
-    <a asp-action="List">Listeye Dön</a>
 </div>

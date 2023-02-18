@@ -22,15 +22,15 @@ namespace Application.Services
             _productMgr = productMgr;
             _supplierMgr = supplierMgr;
         }
-        public List<Purchase> GetValidList()
+        public List<Purchase> GetList()
         {
             var list = _unitOfWork.PurchaseRepository.Get()
                 .Include(x => x.Product)
                 .Include(x => x.Supplier)
                 .Include(x => x.User)
                 .ToList();
-            var products = _productMgr.GetValidProducts().Select(x => x.Id);
-            var suppliers = _supplierMgr.GetValidSuppliers().Select(x => x.Id);
+            var products = _productMgr.GetList().Select(x => x.Id);
+            var suppliers = _supplierMgr.GetList().Select(x => x.Id);
             list.RemoveAll(x => !products.Contains(x.ProductId));
             list.RemoveAll(x => !suppliers.Contains(x.SupplierId));
             return list;
@@ -45,7 +45,7 @@ namespace Application.Services
                 .Include(x => x.Supplier)
                 .Include(x => x.User)
                 .ToList();
-            var products = _productMgr.GetValidProducts().Select(x => x.Id);
+            var products = _productMgr.GetList().Select(x => x.Id);
             list.RemoveAll(x => !products.Contains(x.ProductId));
             return list;
         }
@@ -57,7 +57,7 @@ namespace Application.Services
             {
                 return Result.Error(1, "Ürün bulunamadı");
             }
-            var supplierResult = _supplierMgr.GetValidSupplier(data.SupplierId);
+            var supplierResult = _supplierMgr.GetSupplier(data.SupplierId);
             if(supplierResult.IsFailure)
             {
                 return supplierResult.ToResult(100);

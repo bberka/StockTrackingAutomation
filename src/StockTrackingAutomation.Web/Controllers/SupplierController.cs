@@ -20,7 +20,7 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var list = _supplierMgr.GetValidSuppliers();
+            var list = _supplierMgr.GetList();
             logger.Info("Supplier count:" + list.Count);
             return View(list);
         }
@@ -61,14 +61,14 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var data = _supplierMgr.GetValidSupplier(id);
+            var data = _supplierMgr.GetSupplier(id);
             logger.Info("Supplier details:" + id);
             return View(data.Data);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var data = _supplierMgr.GetValidSupplier(id);
+            var data = _supplierMgr.GetSupplier(id);
             logger.Info("Data edit:" + id);
             return View(data.Data);
         }

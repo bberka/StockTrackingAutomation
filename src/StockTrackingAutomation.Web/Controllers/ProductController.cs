@@ -19,7 +19,7 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var res = _productMgr.GetValidProducts();
+            var res = _productMgr.GetList();
             logger.Info("Product list count: " + res.Count);
             return View(res);
         }

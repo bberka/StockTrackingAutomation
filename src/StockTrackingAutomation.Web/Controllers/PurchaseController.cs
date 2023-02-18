@@ -34,7 +34,7 @@ namespace StockTrackingAutomation.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var list = _purchaseService.GetValidList();
+            var list = _purchaseService.GetList();
             return View(list);
         }
 
@@ -43,16 +43,16 @@ namespace StockTrackingAutomation.Web.Controllers
         {
             var res = new BuyLogCreateViewModel
             {
-                Products = _productMgr.GetValidProducts(),
-                Suppliers = _supplierMgr.GetValidSuppliers()
+                Products = _productMgr.GetList(),
+                Suppliers = _supplierMgr.GetList()
             };
             return View(res);
         }
         [HttpPost]
         public IActionResult Create(BuyLogCreateViewModel viewModel)
         {
-            viewModel.Products = _productMgr.GetValidProducts();
-            viewModel.Suppliers = _supplierMgr.GetValidSuppliers();
+            viewModel.Products = _productMgr.GetList();
+            viewModel.Suppliers = _supplierMgr.GetList();
             var userNo = HttpContext.GetUser().Id;
             viewModel.Data.UserId = userNo;
             var res = _purchaseService.AddBuyLog(viewModel.Data);
