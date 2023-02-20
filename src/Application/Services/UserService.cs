@@ -3,8 +3,6 @@ using Domain.Entities;
 using Domain.Models;
 using EasMe;
 using EasMe.Extensions;
-using EasMe.Helpers;
-using EasMe.Models;
 
 namespace Application.Services
 {

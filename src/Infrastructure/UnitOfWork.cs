@@ -1,10 +1,9 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
 using EasMe.EntityFrameworkCore.V1;
-using EasMe.Enums;
 using EasMe.Extensions;
 using EasMe.Logging;
-using EasMe.Models;
+using EasMe.Result;
 using Infrastructure.DAL;
 using Microsoft.EntityFrameworkCore;
 

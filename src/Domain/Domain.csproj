@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -25,6 +21,9 @@
     </Reference>
     <Reference Include="EasMe.Logging">
       <HintPath>..\..\..\easme-lib\bin\Release\net6.0\EasMe.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="EasMe.Result">
+      <HintPath>..\..\..\easme-lib\bin\Release\net6.0\EasMe.Result.dll</HintPath>
     </Reference>
   </ItemGroup>
 
