@@ -12,15 +12,13 @@
 
 </head>
 <body>
-
     <div class="row">
-        <div class="col-sm-2 ">
+        <div class="col-sm-2 bg-black h-100">
             @if (ViewContext.HttpContext.IsAuthenticated())
             {
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link" asp-controller="Home" asp-action="Index" role="tab" aria-selected="true">
                         <i class="fas fa-chart-line fa-fw me-3"></i>
-
                         Anasayfa
                     </a>
                     <a class="nav-link" asp-controller="Product" asp-action="List" role="tab" aria-selected="false">
@@ -53,7 +51,7 @@
                         <i class="fas fa-users-gear fa-fw me-3"></i>
                         Kullanıcılar
                     </a>
-                    <hr/>
+                    <hr />
                     <a class="nav-link" asp-controller="Account" asp-action="Details" role="tab" aria-selected="false">
                         <i class="fas fa-user-gear fa-fw me-3"></i>
                         Hesabım
@@ -92,7 +90,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
